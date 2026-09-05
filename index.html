@@ -727,21 +727,44 @@ function refreshExistingPosts(type,map) {
   group.addTo(map);
   existingPostsGroups[type]=group;
 }
-function onFormMapClick(type,latlng) {
+async function reverseGeocode(lat, lng) {
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=ja`;
+    const res = await fetch(url);
+    const d   = await res.json();
+    const a   = d.address || {};
+    return a.building || a.amenity || a.shop || a.office || a.tourism ||
+           a.leisure  || a.road    || a.hamlet || a.suburb || a.village ||
+           d.display_name?.split(',')[0] ||
+           `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  } catch(e) {
+    return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  }
+}
+
+function onFormMapClick(type, latlng) {
   const st=formState[type]; const map=formMaps[type]; const arr=[latlng.lat,latlng.lng];
   if(st.mode==='from') {
     if(st.fromMarker) map.removeLayer(st.fromMarker);
-    st.fromMarker=L.marker(latlng,{icon:fromIcon}).addTo(map).bindPopup('出発地').openPopup();
-    st.fromLatLng=arr;
-    if(type==='want'&&!document.getElementById('w-from').value) document.getElementById('w-from').value=`${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`;
-    if(type==='offer'&&!document.getElementById('o-from').value) document.getElementById('o-from').value=`${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`;
+    st.fromMarker = L.marker(latlng,{icon:fromIcon}).addTo(map).bindPopup('出発地…').openPopup();
+    st.fromLatLng = arr;
+    const field = document.getElementById(type==='want'?'w-from':'o-from');
+    field.value  = '取得中…';
+    reverseGeocode(latlng.lat, latlng.lng).then(name => {
+      field.value = name;
+      st.fromMarker?.setPopupContent(`出発地：${name}`);
+    });
     setMode(type,'to');
   } else {
     if(st.toMarker) map.removeLayer(st.toMarker);
-    st.toMarker=L.marker(latlng,{icon:toIcon}).addTo(map).bindPopup('目的地').openPopup();
-    st.toLatLng=arr;
-    if(type==='want'&&!document.getElementById('w-to').value) document.getElementById('w-to').value=`${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`;
-    if(type==='offer'&&!document.getElementById('o-to').value) document.getElementById('o-to').value=`${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`;
+    st.toMarker = L.marker(latlng,{icon:toIcon}).addTo(map).bindPopup('目的地…').openPopup();
+    st.toLatLng = arr;
+    const field = document.getElementById(type==='want'?'w-to':'o-to');
+    field.value  = '取得中…';
+    reverseGeocode(latlng.lat, latlng.lng).then(name => {
+      field.value = name;
+      st.toMarker?.setPopupContent(`目的地：${name}`);
+    });
   }
   if(st.fromLatLng&&st.toLatLng) drawRoute(map,st.fromLatLng,st.toLatLng,st);
 }
