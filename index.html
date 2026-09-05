@@ -186,6 +186,32 @@
     background: #f4f2ed;
     border-top: 1px solid var(--border);
   }
+  .map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.76rem;
+    color: #556;
+    background: #eeeae3;
+    border-top: 1px solid var(--border);
+  }
+  .leg-dot {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 3px;
+    opacity: 0.85;
+  }
+  .leg-dash {
+    display: inline-block;
+    width: 16px; height: 3px;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 3px;
+    opacity: 0.7;
+  }
 
   /* 掲示板 */
   .board-section { margin-bottom: 1.8rem; }
@@ -359,7 +385,7 @@
 
   <div class="map-panel" id="mp-want">
     <div class="map-panel-header" id="mph-want" onclick="toggleMapPanel('want')">
-      🗺️ 地図で出発地・目的地を指定する
+      🗺️ 地図で指定 ＋ 乗せたい投稿を確認
       <em class="chevron">▼</em>
     </div>
     <div class="map-panel-body" id="mpb-want">
@@ -369,7 +395,12 @@
         <button class="mode-btn gps-btn"               onclick="useGPS('want')">📡 現在地</button>
       </div>
       <div id="fmap-want" class="form-leaflet-map"></div>
-      <div class="map-hint">地図をタップして出発地・目的地を設定。テキスト欄の入力も併用できます。</div>
+      <div class="map-hint">地図をタップして出発地・目的地を設定。マーカーをタップすると詳細を確認できます。</div>
+      <div class="map-legend">
+        <span><span class="leg-dot" style="background:#2e6f8e"></span>あなたの出発地</span>
+        <span><span class="leg-dot" style="background:#c8451f"></span>あなたの目的地</span>
+        <span><span class="leg-dash" style="background:#2e7d52"></span>乗せたい投稿のルート</span>
+      </div>
     </div>
   </div>
 </div>
@@ -394,7 +425,7 @@
 
   <div class="map-panel" id="mp-offer">
     <div class="map-panel-header" id="mph-offer" onclick="toggleMapPanel('offer')">
-      🗺️ 地図でルートを指定する
+      🗺️ 地図で指定 ＋ 乗りたい投稿を確認
       <em class="chevron">▼</em>
     </div>
     <div class="map-panel-body" id="mpb-offer">
@@ -404,7 +435,12 @@
         <button class="mode-btn gps-btn"                 onclick="useGPS('offer')">📡 現在地</button>
       </div>
       <div id="fmap-offer" class="form-leaflet-map"></div>
-      <div class="map-hint">地図をタップして出発地・目的地を設定。テキスト欄の入力も併用できます。</div>
+      <div class="map-hint">地図をタップして出発地・目的地を設定。マーカーをタップすると詳細を確認できます。</div>
+      <div class="map-legend">
+        <span><span class="leg-dot" style="background:#2e6f8e"></span>あなたの出発地</span>
+        <span><span class="leg-dot" style="background:#c8451f"></span>あなたの目的地</span>
+        <span><span class="leg-dash" style="background:#c8451f"></span>乗りたい投稿のルート</span>
+      </div>
     </div>
   </div>
 </div>
@@ -568,7 +604,8 @@ function match(id) {
 }
 
 /* ===== 地図（フォーム用） ===== */
-const formMaps  = {};
+const formMaps           = {};
+const existingPostsGroups = {};
 const formState = {
   want:  { mode:'from', fromLatLng:null, toLatLng:null, fromMarker:null, toMarker:null, routeLayer:null },
   offer: { mode:'from', fromLatLng:null, toLatLng:null, fromMarker:null, toMarker:null, routeLayer:null },
@@ -591,8 +628,14 @@ function toggleMapPanel(type) {
   const open = body.classList.toggle('open');
   hdr.classList.toggle('open', open);
   if (open) {
-    if (!formMaps[type]) initFormMap(type);
-    else setTimeout(() => formMaps[type].invalidateSize(), 60);
+    if (!formMaps[type]) {
+      initFormMap(type);
+    } else {
+      setTimeout(() => {
+        formMaps[type].invalidateSize();
+        refreshExistingPosts(type, formMaps[type]);
+      }, 60);
+    }
   }
 }
 
@@ -604,6 +647,29 @@ function initFormMap(type) {
   }).addTo(map);
   map.on('click', e => onFormMapClick(type, e.latlng));
   formMaps[type] = map;
+  refreshExistingPosts(type, map);
+}
+
+function refreshExistingPosts(type, map) {
+  if (existingPostsGroups[type]) map.removeLayer(existingPostsGroups[type]);
+
+  const showType = type === 'want' ? 'offer' : 'want';
+  const lineColor = showType === 'offer' ? '#2e7d52' : '#c8451f';
+  const group = L.layerGroup();
+  const posts = load().filter(p => p.type === showType && p.fromLatLng && p.toLatLng && p.status !== 'matched');
+
+  posts.forEach(p => {
+    const popup = `<b>${esc(p.name)}</b><br>${esc(p.from)} → ${esc(p.to)}<br>時刻：${esc(p.departTime)}`;
+    L.polyline([p.fromLatLng, p.toLatLng], {color: lineColor, weight: 2.5, opacity: 0.55, dashArray: '6 4'})
+      .addTo(group).bindPopup(popup);
+    L.circleMarker(p.fromLatLng, {radius:6, color:'#2e6f8e', fillColor:'#2e6f8e', fillOpacity:0.75, weight:1.5})
+      .addTo(group).bindPopup(`<b>${esc(p.name)}</b><br>出発：${esc(p.from)}`);
+    L.circleMarker(p.toLatLng,   {radius:6, color: lineColor, fillColor: lineColor, fillOpacity:0.75, weight:1.5})
+      .addTo(group).bindPopup(`<b>${esc(p.name)}</b><br>目的：${esc(p.to)}`);
+  });
+
+  group.addTo(map);
+  existingPostsGroups[type] = group;
 }
 
 function onFormMapClick(type, latlng) {
