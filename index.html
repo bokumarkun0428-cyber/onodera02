@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>のっけて！気仙沼</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
   :root {
     --ink:    #1b2a3a;
@@ -23,7 +24,6 @@
     min-height: 100svh;
   }
 
-  /* ヘッダー */
   header {
     background: var(--ink);
     color: var(--paper);
@@ -34,14 +34,13 @@
   header h1 span { color: #5bb8dc; }
   header p { font-size: 0.8rem; color: #8ab4c8; margin-top: 0.3rem; }
 
-  /* タブ */
   .tabs {
     display: flex;
     border-bottom: 2px solid var(--border);
     background: var(--card);
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 50;
   }
   .tab {
     flex: 1;
@@ -60,17 +59,26 @@
   .tab.active { color: var(--wave); border-bottom-color: var(--wave); }
   .tab.active.want { color: var(--accent); border-bottom-color: var(--accent); }
 
-  /* コンテンツ */
   .pane { display: none; padding: 1.2rem 1rem 5rem; max-width: 640px; margin: 0 auto; }
   .pane.active { display: block; }
 
-  /* フォーム */
+  .intro {
+    font-size: 0.85rem;
+    color: #556;
+    line-height: 1.8;
+    background: var(--light);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  /* フォームカード */
   .form-card {
     background: var(--card);
     border-radius: 10px;
     padding: 1.2rem;
     border: 1px solid var(--border);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
   .form-card h2 {
     font-size: 1rem;
@@ -87,11 +95,11 @@
     border-radius: 999px;
     color: #fff;
   }
-  .badge.want { background: var(--accent); }
+  .badge.want  { background: var(--accent); }
   .badge.offer { background: var(--green); }
 
   label { display: block; font-size: 0.82rem; color: #556; margin-bottom: 0.25rem; margin-top: 0.8rem; }
-  input, textarea, select {
+  input, textarea {
     width: 100%;
     padding: 0.55rem 0.75rem;
     border: 1px solid var(--border);
@@ -120,12 +128,70 @@
   .btn.want  { background: var(--accent); }
   .btn.offer { background: var(--green); }
 
-  /* 掲示板カード */
+  /* 地図パネル（フォーム内） */
+  .map-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .map-panel-header {
+    padding: 0.8rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--wave);
+    user-select: none;
+  }
+  .map-panel-header:hover { background: var(--light); }
+  .map-panel-header .chevron { margin-left: auto; transition: transform 0.2s; font-style: normal; }
+  .map-panel-header.open .chevron { transform: rotate(180deg); }
+  .map-panel-body { display: none; }
+  .map-panel-body.open { display: block; }
+
+  .mode-row {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.65rem 0.9rem;
+    background: #f4f2ed;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .mode-btn {
+    flex: 1;
+    min-width: 90px;
+    padding: 0.4rem 0.5rem;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: #fff;
+    color: #667;
+    transition: all 0.15s;
+  }
+  .mode-btn.sel-from { border-color: var(--wave); color: var(--wave); background: var(--light); }
+  .mode-btn.sel-to   { border-color: var(--accent); color: var(--accent); background: #fdf0ec; }
+  .gps-btn { flex: none !important; border-color: var(--green) !important; color: var(--green) !important; }
+
+  .form-leaflet-map { height: 250px; }
+  .map-hint {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.76rem;
+    color: #778;
+    background: #f4f2ed;
+    border-top: 1px solid var(--border);
+  }
+
+  /* 掲示板 */
   .board-section { margin-bottom: 1.8rem; }
   .board-section h3 {
     font-size: 0.82rem;
     color: #778;
-    text-transform: uppercase;
     letter-spacing: 0.06em;
     margin-bottom: 0.7rem;
   }
@@ -135,9 +201,8 @@
     border-radius: 10px;
     padding: 1rem 1.1rem;
     margin-bottom: 0.75rem;
-    position: relative;
   }
-  .post-card.matched { opacity: 0.55; }
+  .post-card.matched { opacity: 0.5; }
   .post-header {
     display: flex;
     align-items: center;
@@ -145,53 +210,100 @@
     margin-bottom: 0.6rem;
   }
   .post-name { font-weight: 700; font-size: 0.95rem; }
-  .post-time { font-size: 0.78rem; color: #889; margin-left: auto; }
-  .route {
+  .post-ts   { font-size: 0.77rem; color: #889; margin-left: auto; }
+  .route-row {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 0.45rem;
-  }
-  .route .from { color: var(--wave); }
-  .route .to   { color: var(--accent); }
-  .route .arrow { color: #aaa; font-size: 0.9rem; }
-  .depart-time {
-    font-size: 0.83rem;
-    color: #556;
     margin-bottom: 0.4rem;
   }
-  .comment {
-    font-size: 0.85rem;
-    color: #445;
-    line-height: 1.7;
-    margin-bottom: 0.6rem;
-  }
+  .route-row .fr { color: var(--wave); }
+  .route-row .to { color: var(--accent); }
+  .route-row .ar { color: #bbb; }
+  .depart-time { font-size: 0.82rem; color: #556; margin-bottom: 0.4rem; }
+  .comment     { font-size: 0.84rem; color: #445; line-height: 1.75; margin-bottom: 0.65rem; }
+  .card-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+
   .match-btn {
-    padding: 0.45rem 1rem;
+    padding: 0.42rem 1rem;
     border: none;
     border-radius: 6px;
-    font-size: 0.85rem;
+    font-size: 0.84rem;
     font-weight: 700;
     cursor: pointer;
     color: #fff;
-    transition: opacity 0.15s;
   }
   .match-btn.want  { background: var(--green); }
   .match-btn.offer { background: var(--accent); }
-  .match-btn:active { opacity: 0.75; }
+  .map-view-btn {
+    padding: 0.42rem 0.85rem;
+    border: 1.5px solid var(--wave);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--wave);
+    background: var(--light);
+  }
   .matched-label {
-    display: inline-block;
     font-size: 0.8rem;
     color: #889;
     border: 1px solid #ccc;
     border-radius: 6px;
-    padding: 0.35rem 0.8rem;
+    padding: 0.32rem 0.75rem;
   }
+  .no-map-note { font-size: 0.76rem; color: #aaa; }
   .empty { text-align:center; color:#aaa; font-size:0.9rem; padding: 2rem 0; }
 
-  /* 通知トースト */
+  /* ルートモーダル */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 200;
+    padding: 3rem 1rem 1rem;
+    overflow-y: auto;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--card);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 580px;
+    overflow: hidden;
+    align-self: flex-start;
+  }
+  .modal-hdr {
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-hdr h3 { font-size: 1rem; }
+  .modal-close {
+    border: none; background: none;
+    font-size: 1.5rem; line-height: 1;
+    cursor: pointer; color: #778;
+  }
+  #route-map { height: 360px; }
+  .modal-info {
+    padding: 0.9rem 1.1rem;
+    font-size: 0.85rem;
+    color: #445;
+    line-height: 1.85;
+    border-top: 1px solid var(--border);
+  }
+  .modal-route-row {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem;
+  }
+
+  /* トースト */
   #toast {
     position: fixed;
     bottom: 1.5rem;
@@ -206,20 +318,12 @@
     transition: transform 0.3s, opacity 0.3s;
     pointer-events: none;
     white-space: nowrap;
-    z-index: 100;
+    z-index: 400;
   }
   #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  /* 説明 */
-  .intro {
-    font-size: 0.85rem;
-    color: #556;
-    line-height: 1.8;
-    background: var(--light);
-    border-radius: 8px;
-    padding: 0.85rem 1rem;
-    margin-bottom: 1.2rem;
-  }
+  /* Leaflet の z-index を sticky ヘッダの下に固定 */
+  .leaflet-top, .leaflet-bottom { z-index: 5 !important; }
 </style>
 </head>
 <body>
@@ -231,69 +335,77 @@
 
 <div class="tabs">
   <button class="tab want active" onclick="showTab('want')">乗りたい</button>
-  <button class="tab offer" onclick="showTab('offer')">乗せたい</button>
-  <button class="tab" onclick="showTab('board')">掲示板</button>
+  <button class="tab offer"       onclick="showTab('offer')">乗せたい</button>
+  <button class="tab"             onclick="showTab('board')">掲示板</button>
 </div>
 
-<!-- 乗りたいフォーム -->
+<!-- 乗りたい -->
 <div class="pane active" id="pane-want">
   <div class="intro">目的地と出発地を入力して投稿しましょう。近くにいるドライバーが声をかけてくれます。</div>
   <div class="form-card">
     <h2><span class="badge want">乗りたい</span> 移動リクエストを投稿</h2>
     <div class="row2">
-      <div>
-        <label>出発地</label>
-        <input id="w-from" type="text" placeholder="例：本郷、唐桑">
-      </div>
-      <div>
-        <label>目的地</label>
-        <input id="w-to" type="text" placeholder="例：気仙沼駅、病院">
-      </div>
+      <div><label>出発地</label><input id="w-from" type="text" placeholder="例：本郷、唐桑"></div>
+      <div><label>目的地</label><input id="w-to"   type="text" placeholder="例：気仙沼駅、病院"></div>
     </div>
     <div class="row2">
-      <div>
-        <label>希望時刻</label>
-        <input id="w-time" type="time">
-      </div>
-      <div>
-        <label>名前（ニックネーム可）</label>
-        <input id="w-name" type="text" placeholder="例：田中さん">
-      </div>
+      <div><label>希望時刻</label><input id="w-time" type="time"></div>
+      <div><label>名前（ニックネーム可）</label><input id="w-name" type="text" placeholder="例：田中さん"></div>
     </div>
     <label>一言コメント</label>
-    <textarea id="w-comment" placeholder="例：病院の帰りで荷物があります。どうぞよろしくお願いします。"></textarea>
+    <textarea id="w-comment" placeholder="例：病院の帰りで荷物があります。よろしくお願いします。"></textarea>
     <button class="btn want" onclick="postWant()">乗せてください！と投稿する</button>
+  </div>
+
+  <div class="map-panel" id="mp-want">
+    <div class="map-panel-header" id="mph-want" onclick="toggleMapPanel('want')">
+      🗺️ 地図で出発地・目的地を指定する
+      <em class="chevron">▼</em>
+    </div>
+    <div class="map-panel-body" id="mpb-want">
+      <div class="mode-row">
+        <button class="mode-btn sel-from" id="mbf-want" onclick="setMode('want','from')">📍 出発地を指定中</button>
+        <button class="mode-btn"          id="mbt-want" onclick="setMode('want','to')">🏁 目的地を指定中</button>
+        <button class="mode-btn gps-btn"               onclick="useGPS('want')">📡 現在地</button>
+      </div>
+      <div id="fmap-want" class="form-leaflet-map"></div>
+      <div class="map-hint">地図をタップして出発地・目的地を設定。テキスト欄の入力も併用できます。</div>
+    </div>
   </div>
 </div>
 
-<!-- 乗せたいフォーム -->
+<!-- 乗せたい -->
 <div class="pane" id="pane-offer">
   <div class="intro">これから移動するルートを投稿しましょう。ルートが近い人を乗せてあげることができます。</div>
   <div class="form-card">
     <h2><span class="badge offer">乗せたい</span> ドライブルートを投稿</h2>
     <div class="row2">
-      <div>
-        <label>出発地</label>
-        <input id="o-from" type="text" placeholder="例：気仙沼駅前">
-      </div>
-      <div>
-        <label>向かう方向・目的地</label>
-        <input id="o-to" type="text" placeholder="例：唐桑方面、本吉方面">
-      </div>
+      <div><label>出発地</label><input id="o-from" type="text" placeholder="例：気仙沼駅前"></div>
+      <div><label>向かう方向・目的地</label><input id="o-to" type="text" placeholder="例：唐桑方面"></div>
     </div>
     <div class="row2">
-      <div>
-        <label>出発時刻</label>
-        <input id="o-time" type="time">
-      </div>
-      <div>
-        <label>名前（ニックネーム可）</label>
-        <input id="o-name" type="text" placeholder="例：佐藤さん">
-      </div>
+      <div><label>出発時刻</label><input id="o-time" type="time"></div>
+      <div><label>名前（ニックネーム可）</label><input id="o-name" type="text" placeholder="例：佐藤さん"></div>
     </div>
     <label>一言コメント</label>
     <textarea id="o-comment" placeholder="例：唐桑まで寄り道OKです。2〜3名乗れます。"></textarea>
     <button class="btn offer" onclick="postOffer()">乗せます！と投稿する</button>
+  </div>
+
+  <div class="map-panel" id="mp-offer">
+    <div class="map-panel-header" id="mph-offer" onclick="toggleMapPanel('offer')">
+      🗺️ 地図でルートを指定する
+      <em class="chevron">▼</em>
+    </div>
+    <div class="map-panel-body" id="mpb-offer">
+      <div class="mode-row">
+        <button class="mode-btn sel-from" id="mbf-offer" onclick="setMode('offer','from')">📍 出発地を指定中</button>
+        <button class="mode-btn"          id="mbt-offer" onclick="setMode('offer','to')">🏁 目的地を指定中</button>
+        <button class="mode-btn gps-btn"                 onclick="useGPS('offer')">📡 現在地</button>
+      </div>
+      <div id="fmap-offer" class="form-leaflet-map"></div>
+      <div class="map-hint">地図をタップして出発地・目的地を設定。テキスト欄の入力も併用できます。</div>
+    </div>
   </div>
 </div>
 
@@ -301,52 +413,92 @@
 <div class="pane" id="pane-board">
   <div class="board-section">
     <h3>乗りたい人</h3>
-    <div id="board-want"></div>
+    <div id="brd-want"></div>
   </div>
   <div class="board-section">
     <h3>乗せたい人</h3>
-    <div id="board-offer"></div>
+    <div id="brd-offer"></div>
+  </div>
+</div>
+
+<!-- ルート確認モーダル -->
+<div class="modal-overlay" id="route-modal" onclick="handleModalClick(event)">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3 id="modal-title">ルート確認</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="route-map"></div>
+    <div class="modal-info" id="modal-info"></div>
   </div>
 </div>
 
 <div id="toast"></div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const STORAGE_KEY = 'kesennuma-hitchhike-v1';
+/* ===== 定数 ===== */
+const STORAGE_KEY = 'kesennuma-hitchhike-v2';
+const CENTER = [38.905, 141.569]; // 気仙沼市中心部
 
-// デモ用初期データ
+/* ===== デモデータ ===== */
 const DEMO = [
-  { id:'d1', type:'want', name:'鈴木さん', from:'本郷', to:'気仙沼市立病院', departTime:'10:30', comment:'定期通院です。荷物は少なめです。どうぞよろしくお願いします。', status:'open', createdAt: Date.now()-1000*60*25 },
-  { id:'d2', type:'offer', name:'阿部さん', from:'気仙沼駅前', to:'唐桑方面', departTime:'11:00', comment:'唐桑の実家まで向かいます。途中で寄り道も大丈夫です。3名まで乗れます。', status:'open', createdAt: Date.now()-1000*60*18 },
-  { id:'d3', type:'want', name:'佐々木さん', from:'階上（はしかみ）', to:'気仙沼駅', departTime:'13:00', comment:'買い物帰りで少し荷物があります。よろしくお願いします。', status:'open', createdAt: Date.now()-1000*60*10 },
-  { id:'d4', type:'offer', name:'小野寺さん', from:'気仙沼市内', to:'本吉・南三陸方面', departTime:'14:30', comment:'本吉まで用事があります。途中の方もどうぞ。', status:'open', createdAt: Date.now()-1000*60*5 },
+  {
+    id:'d1', type:'want', name:'鈴木さん',
+    from:'本郷', to:'気仙沼市立病院',
+    fromLatLng:[38.912, 141.568], toLatLng:[38.901, 141.572],
+    departTime:'10:30',
+    comment:'定期通院です。荷物は少なめです。どうぞよろしくお願いします。',
+    status:'open', createdAt: Date.now()-60000*25
+  },
+  {
+    id:'d2', type:'offer', name:'阿部さん',
+    from:'気仙沼駅前', to:'唐桑方面',
+    fromLatLng:[38.905, 141.569], toLatLng:[38.880, 141.640],
+    departTime:'11:00',
+    comment:'唐桑の実家まで向かいます。途中で寄り道も大丈夫です。3名まで乗れます。',
+    status:'open', createdAt: Date.now()-60000*18
+  },
+  {
+    id:'d3', type:'want', name:'佐々木さん',
+    from:'階上（はしかみ）', to:'気仙沼駅',
+    fromLatLng:[38.870, 141.570], toLatLng:[38.905, 141.569],
+    departTime:'13:00',
+    comment:'買い物帰りで少し荷物があります。よろしくお願いします。',
+    status:'open', createdAt: Date.now()-60000*10
+  },
+  {
+    id:'d4', type:'offer', name:'小野寺さん',
+    from:'気仙沼市内', to:'本吉・南三陸方面',
+    fromLatLng:[38.905, 141.569], toLatLng:[38.740, 141.510],
+    departTime:'14:30',
+    comment:'本吉まで用事があります。途中の方もどうぞ。',
+    status:'open', createdAt: Date.now()-60000*5
+  },
 ];
 
+/* ===== ストレージ ===== */
 function load() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) return JSON.parse(raw);
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
   localStorage.setItem(STORAGE_KEY, JSON.stringify(DEMO));
   return DEMO;
 }
 function save(posts) { localStorage.setItem(STORAGE_KEY, JSON.stringify(posts)); }
 
+/* ===== ユーティリティ ===== */
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function uid() { return 'p' + Date.now() + Math.random().toString(36).slice(2,6); }
 function timeAgo(ts) {
-  const m = Math.floor((Date.now() - ts) / 60000);
-  if (m < 1) return 'たった今';
+  const m = Math.floor((Date.now()-ts)/60000);
+  if (m < 1)  return 'たった今';
   if (m < 60) return m + '分前';
   return Math.floor(m/60) + '時間前';
 }
-
-function showTab(tab) {
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    const ids = ['want','offer','board'];
-    t.classList.toggle('active', ids[i] === tab);
-  });
-  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
-  document.getElementById('pane-' + tab).classList.add('active');
-  if (tab === 'board') renderBoard();
-}
-
 function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -354,87 +506,259 @@ function toast(msg) {
   setTimeout(() => el.classList.remove('show'), 2800);
 }
 
+/* ===== タブ ===== */
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', ['want','offer','board'][i] === tab);
+  });
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane-' + tab).classList.add('active');
+  if (tab === 'board') renderBoard();
+  setTimeout(() => {
+    const m = formMaps[tab];
+    if (m && document.getElementById(`mpb-${tab}`)?.classList.contains('open')) m.invalidateSize();
+  }, 60);
+}
+
+/* ===== 掲示板レンダリング ===== */
 function renderBoard() {
   const posts = load();
-  const wants  = posts.filter(p => p.type === 'want');
-  const offers = posts.filter(p => p.type === 'offer');
-
-  document.getElementById('board-want').innerHTML  = renderCards(wants,  'want');
-  document.getElementById('board-offer').innerHTML = renderCards(offers, 'offer');
+  document.getElementById('brd-want').innerHTML  = renderCards(posts.filter(p=>p.type==='want'),  'want');
+  document.getElementById('brd-offer').innerHTML = renderCards(posts.filter(p=>p.type==='offer'), 'offer');
 }
 
 function renderCards(posts, type) {
   if (!posts.length) return '<div class="empty">投稿がありません</div>';
-  return posts.sort((a,b) => b.createdAt - a.createdAt).map(p => {
-    const actionLabel = type === 'want' ? '乗せます' : '乗ります';
-    const actionClass = type === 'want' ? 'want' : 'offer';
+  return [...posts].sort((a,b)=>b.createdAt-a.createdAt).map(p => {
+    const label  = type==='want' ? '乗せます' : '乗ります';
+    const cls    = type==='want' ? 'want' : 'offer';
     const action = p.status === 'matched'
       ? `<span class="matched-label">マッチング済み</span>`
-      : `<button class="match-btn ${actionClass}" onclick="match('${p.id}')">${actionLabel}</button>`;
+      : `<button class="match-btn ${cls}" onclick="match('${p.id}')">${label}</button>`;
+    const mapBtn = (p.fromLatLng && p.toLatLng)
+      ? `<button class="map-view-btn" onclick='openRouteModal(${JSON.stringify(p)})'>🗺️ 地図を見る</button>`
+      : `<span class="no-map-note">（位置情報なし）</span>`;
     return `
-    <div class="post-card ${p.status === 'matched' ? 'matched' : ''}">
+    <div class="post-card ${p.status==='matched'?'matched':''}">
       <div class="post-header">
-        <span class="badge ${type}">${type === 'want' ? '乗りたい' : '乗せたい'}</span>
+        <span class="badge ${type}">${type==='want'?'乗りたい':'乗せたい'}</span>
         <span class="post-name">${esc(p.name)}</span>
-        <span class="post-time">${timeAgo(p.createdAt)}</span>
+        <span class="post-ts">${timeAgo(p.createdAt)}</span>
       </div>
-      <div class="route">
-        <span class="from">${esc(p.from)}</span>
-        <span class="arrow">→</span>
+      <div class="route-row">
+        <span class="fr">${esc(p.from)}</span>
+        <span class="ar">→</span>
         <span class="to">${esc(p.to)}</span>
       </div>
       <div class="depart-time">希望時刻：${esc(p.departTime)}</div>
       ${p.comment ? `<div class="comment">${esc(p.comment)}</div>` : ''}
-      ${action}
+      <div class="card-actions">${action}${mapBtn}</div>
     </div>`;
   }).join('');
 }
 
-function esc(s) {
-  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
 function match(id) {
   const posts = load();
-  const p = posts.find(x => x.id === id);
-  if (!p || p.status === 'matched') return;
+  const p = posts.find(x=>x.id===id);
+  if (!p || p.status==='matched') return;
   p.status = 'matched';
   save(posts);
   renderBoard();
-  const msg = p.type === 'want'
-    ? `${p.name} さんに「乗せます」と伝えました！`
-    : `${p.name} さんに「乗ります」と伝えました！`;
-  toast(msg);
+  toast(p.type==='want' ? `${p.name}さんに「乗せます」と伝えました！` : `${p.name}さんに「乗ります」と伝えました！`);
 }
 
-function uid() { return 'p' + Date.now() + Math.random().toString(36).slice(2,6); }
+/* ===== 地図（フォーム用） ===== */
+const formMaps  = {};
+const formState = {
+  want:  { mode:'from', fromLatLng:null, toLatLng:null, fromMarker:null, toMarker:null, routeLayer:null },
+  offer: { mode:'from', fromLatLng:null, toLatLng:null, fromMarker:null, toMarker:null, routeLayer:null },
+};
 
+const fromIcon = L.divIcon({
+  className:'',
+  html:'<div style="width:14px;height:14px;border-radius:50%;background:#2e6f8e;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>',
+  iconSize:[14,14], iconAnchor:[7,7]
+});
+const toIcon = L.divIcon({
+  className:'',
+  html:'<div style="width:14px;height:14px;border-radius:50%;background:#c8451f;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>',
+  iconSize:[14,14], iconAnchor:[7,7]
+});
+
+function toggleMapPanel(type) {
+  const hdr  = document.getElementById(`mph-${type}`);
+  const body = document.getElementById(`mpb-${type}`);
+  const open = body.classList.toggle('open');
+  hdr.classList.toggle('open', open);
+  if (open) {
+    if (!formMaps[type]) initFormMap(type);
+    else setTimeout(() => formMaps[type].invalidateSize(), 60);
+  }
+}
+
+function initFormMap(type) {
+  const map = L.map(`fmap-${type}`).setView(CENTER, 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(map);
+  map.on('click', e => onFormMapClick(type, e.latlng));
+  formMaps[type] = map;
+}
+
+function onFormMapClick(type, latlng) {
+  const st  = formState[type];
+  const map = formMaps[type];
+  const arr = [latlng.lat, latlng.lng];
+  if (st.mode === 'from') {
+    if (st.fromMarker) map.removeLayer(st.fromMarker);
+    st.fromMarker = L.marker(latlng, {icon:fromIcon}).addTo(map).bindPopup('出発地').openPopup();
+    st.fromLatLng = arr;
+    document.getElementById(`w-from`) && (type==='want') && (document.getElementById('w-from').value = document.getElementById('w-from').value || `${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`);
+    document.getElementById(`o-from`) && (type==='offer') && (document.getElementById('o-from').value = document.getElementById('o-from').value || `${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`);
+    setMode(type, 'to');
+  } else {
+    if (st.toMarker) map.removeLayer(st.toMarker);
+    st.toMarker = L.marker(latlng, {icon:toIcon}).addTo(map).bindPopup('目的地').openPopup();
+    st.toLatLng = arr;
+    document.getElementById(`w-to`) && (type==='want') && (document.getElementById('w-to').value = document.getElementById('w-to').value || `${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`);
+    document.getElementById(`o-to`) && (type==='offer') && (document.getElementById('o-to').value = document.getElementById('o-to').value || `${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`);
+  }
+  if (st.fromLatLng && st.toLatLng) drawRoute(map, st.fromLatLng, st.toLatLng, st);
+}
+
+function setMode(type, mode) {
+  formState[type].mode = mode;
+  const fBtn = document.getElementById(`mbf-${type}`);
+  const tBtn = document.getElementById(`mbt-${type}`);
+  fBtn.className = 'mode-btn' + (mode==='from' ? ' sel-from' : '');
+  tBtn.className = 'mode-btn' + (mode==='to'   ? ' sel-to'   : '');
+}
+
+function useGPS(type) {
+  if (!navigator.geolocation) { toast('位置情報が利用できません'); return; }
+  toast('現在地を取得中...');
+  navigator.geolocation.getCurrentPosition(pos => {
+    const map = formMaps[type];
+    if (!map) return;
+    map.setView([pos.coords.latitude, pos.coords.longitude], 14);
+    onFormMapClick(type, L.latLng(pos.coords.latitude, pos.coords.longitude));
+  }, () => toast('位置情報の取得に失敗しました'));
+}
+
+/* ===== ルート描画（OSRM → 直線フォールバック） ===== */
+async function drawRoute(map, from, to, state) {
+  if (state.routeLayer) {
+    if (Array.isArray(state.routeLayer)) state.routeLayer.forEach(l=>map.removeLayer(l));
+    else map.removeLayer(state.routeLayer);
+    state.routeLayer = null;
+  }
+  try {
+    const url = `https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${to[1]},${to[0]}?overview=full&geometries=geojson`;
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if (data.code === 'Ok' && data.routes?.[0]) {
+      const coords = data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+      const line = L.polyline(coords, {color:'#2e6f8e', weight:4, opacity:0.85}).addTo(map);
+      state.routeLayer = line;
+      map.fitBounds(line.getBounds(), {padding:[40,40]});
+      return;
+    }
+  } catch(e) {}
+  const line = L.polyline([from,to], {color:'#2e6f8e', weight:3, opacity:0.65, dashArray:'8 5'}).addTo(map);
+  state.routeLayer = line;
+  map.fitBounds(L.latLngBounds([from,to]), {padding:[40,40]});
+}
+
+/* ===== ルートモーダル ===== */
+let routeMapInst = null;
+const modalRouteState = { routeLayer: null };
+
+function openRouteModal(post) {
+  document.getElementById('modal-title').textContent = `${post.name} さんのルート`;
+  document.getElementById('modal-info').innerHTML = `
+    <div class="modal-route-row">
+      <span style="color:var(--wave)">${esc(post.from)}</span>
+      <span style="color:#bbb">→</span>
+      <span style="color:var(--accent)">${esc(post.to)}</span>
+    </div>
+    <div>出発時刻：${esc(post.departTime)}</div>
+    ${post.comment ? `<div style="margin-top:.4rem;color:#556;">${esc(post.comment)}</div>` : ''}
+  `;
+  document.getElementById('route-modal').classList.add('open');
+
+  setTimeout(() => {
+    if (!routeMapInst) {
+      routeMapInst = L.map('route-map').setView(CENTER, 12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18
+      }).addTo(routeMapInst);
+    } else {
+      routeMapInst.eachLayer(l => { if (!(l instanceof L.TileLayer)) routeMapInst.removeLayer(l); });
+      modalRouteState.routeLayer = null;
+    }
+    routeMapInst.invalidateSize();
+
+    if (post.fromLatLng && post.toLatLng) {
+      L.marker(post.fromLatLng, {icon:fromIcon}).addTo(routeMapInst).bindPopup(`出発地：${post.from}`).openPopup();
+      L.marker(post.toLatLng,   {icon:toIcon  }).addTo(routeMapInst).bindPopup(`目的地：${post.to}`);
+      drawRoute(routeMapInst, post.fromLatLng, post.toLatLng, modalRouteState);
+    } else {
+      routeMapInst.setView(CENTER, 12);
+    }
+  }, 100);
+}
+
+function closeModal() { document.getElementById('route-modal').classList.remove('open'); }
+function handleModalClick(e) { if (e.target === document.getElementById('route-modal')) closeModal(); }
+
+/* ===== 投稿 ===== */
 function postWant() {
-  const from = document.getElementById('w-from').value.trim();
-  const to   = document.getElementById('w-to').value.trim();
-  const time = document.getElementById('w-time').value;
-  const name = document.getElementById('w-name').value.trim();
+  const from    = document.getElementById('w-from').value.trim();
+  const to      = document.getElementById('w-to').value.trim();
+  const time    = document.getElementById('w-time').value;
+  const name    = document.getElementById('w-name').value.trim();
   const comment = document.getElementById('w-comment').value.trim();
   if (!from || !to || !name) { toast('出発地・目的地・名前を入力してください'); return; }
+  const st = formState.want;
   const posts = load();
-  posts.push({ id:uid(), type:'want', name, from, to, departTime:time||'未定', comment, status:'open', createdAt:Date.now() });
+  posts.push({
+    id: uid(), type:'want', name, from, to,
+    fromLatLng: st.fromLatLng, toLatLng: st.toLatLng,
+    departTime: time || '未定', comment, status:'open', createdAt: Date.now()
+  });
   save(posts);
-  ['w-from','w-to','w-time','w-name','w-comment'].forEach(id => document.getElementById(id).value = '');
+  ['w-from','w-to','w-time','w-name','w-comment'].forEach(id => document.getElementById(id).value='');
+  st.fromLatLng = st.toLatLng = null;
+  if (st.fromMarker) { formMaps.want?.removeLayer(st.fromMarker); st.fromMarker=null; }
+  if (st.toMarker)   { formMaps.want?.removeLayer(st.toMarker);   st.toMarker=null; }
+  if (st.routeLayer) { if(Array.isArray(st.routeLayer)) st.routeLayer.forEach(l=>formMaps.want?.removeLayer(l)); else formMaps.want?.removeLayer(st.routeLayer); st.routeLayer=null; }
   toast('投稿しました！掲示板を確認してください');
   showTab('board');
 }
 
 function postOffer() {
-  const from = document.getElementById('o-from').value.trim();
-  const to   = document.getElementById('o-to').value.trim();
-  const time = document.getElementById('o-time').value;
-  const name = document.getElementById('o-name').value.trim();
+  const from    = document.getElementById('o-from').value.trim();
+  const to      = document.getElementById('o-to').value.trim();
+  const time    = document.getElementById('o-time').value;
+  const name    = document.getElementById('o-name').value.trim();
   const comment = document.getElementById('o-comment').value.trim();
   if (!from || !to || !name) { toast('出発地・方向・名前を入力してください'); return; }
+  const st = formState.offer;
   const posts = load();
-  posts.push({ id:uid(), type:'offer', name, from, to, departTime:time||'未定', comment, status:'open', createdAt:Date.now() });
+  posts.push({
+    id: uid(), type:'offer', name, from, to,
+    fromLatLng: st.fromLatLng, toLatLng: st.toLatLng,
+    departTime: time || '未定', comment, status:'open', createdAt: Date.now()
+  });
   save(posts);
-  ['o-from','o-to','o-time','o-name','o-comment'].forEach(id => document.getElementById(id).value = '');
+  ['o-from','o-to','o-time','o-name','o-comment'].forEach(id => document.getElementById(id).value='');
+  st.fromLatLng = st.toLatLng = null;
+  if (st.fromMarker) { formMaps.offer?.removeLayer(st.fromMarker); st.fromMarker=null; }
+  if (st.toMarker)   { formMaps.offer?.removeLayer(st.toMarker);   st.toMarker=null; }
+  if (st.routeLayer) { if(Array.isArray(st.routeLayer)) st.routeLayer.forEach(l=>formMaps.offer?.removeLayer(l)); else formMaps.offer?.removeLayer(st.routeLayer); st.routeLayer=null; }
   toast('投稿しました！掲示板を確認してください');
   showTab('board');
 }
