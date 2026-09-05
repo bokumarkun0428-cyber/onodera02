@@ -3,18 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>気仙沼の風景</title>
+<title>のっけて！気仙沼</title>
 <style>
   :root {
-    --ink: #1b2a3a;
-    --paper: #f6f4ef;
+    --ink:    #1b2a3a;
+    --paper:  #f6f4ef;
     --accent: #c8451f;
-    --wave: #2e6f8e;
-    --sky: #d6eaf8;
+    --wave:   #2e6f8e;
+    --light:  #e8f4fb;
+    --green:  #2e7d52;
+    --card:   #ffffff;
+    --border: #ddd8d0;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin:0; padding:0; box-sizing:border-box; }
   body {
-    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    font-family: "Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
     background: var(--paper);
     color: var(--ink);
     min-height: 100svh;
@@ -24,307 +27,417 @@
   header {
     background: var(--ink);
     color: var(--paper);
+    padding: 1.2rem 1rem 1rem;
     text-align: center;
-    padding: 2.5rem 1rem 2rem;
   }
-  header .sub {
-    font-size: 0.8rem;
-    letter-spacing: 0.4em;
-    color: #8ab4c8;
+  header h1 { font-size: 1.5rem; letter-spacing: 0.05em; }
+  header h1 span { color: #5bb8dc; }
+  header p { font-size: 0.8rem; color: #8ab4c8; margin-top: 0.3rem; }
+
+  /* タブ */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--card);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .tab {
+    flex: 1;
+    padding: 0.85rem 0.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: #778;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.15s;
+  }
+  .tab.active { color: var(--wave); border-bottom-color: var(--wave); }
+  .tab.active.want { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* コンテンツ */
+  .pane { display: none; padding: 1.2rem 1rem 5rem; max-width: 640px; margin: 0 auto; }
+  .pane.active { display: block; }
+
+  /* フォーム */
+  .form-card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 1.2rem;
+    border: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .form-card h2 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2em 0.6em;
+    border-radius: 999px;
+    color: #fff;
+  }
+  .badge.want { background: var(--accent); }
+  .badge.offer { background: var(--green); }
+
+  label { display: block; font-size: 0.82rem; color: #556; margin-bottom: 0.25rem; margin-top: 0.8rem; }
+  input, textarea, select {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: #fafaf8;
+  }
+  textarea { resize: vertical; min-height: 70px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    margin-top: 1.1rem;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+    transition: opacity 0.15s;
+  }
+  .btn:active { opacity: 0.8; }
+  .btn.want  { background: var(--accent); }
+  .btn.offer { background: var(--green); }
+
+  /* 掲示板カード */
+  .board-section { margin-bottom: 1.8rem; }
+  .board-section h3 {
+    font-size: 0.82rem;
+    color: #778;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.7rem;
+  }
+  .post-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+  .post-card.matched { opacity: 0.55; }
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-bottom: 0.6rem;
   }
-  header h1 {
-    font-size: clamp(2rem, 7vw, 3.2rem);
-    letter-spacing: 0.1em;
+  .post-name { font-weight: 700; font-size: 0.95rem; }
+  .post-time { font-size: 0.78rem; color: #889; margin-left: auto; }
+  .route {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.45rem;
   }
-  header h1 span {
-    color: #5bb8dc;
-  }
-  header p {
-    margin-top: 0.8rem;
-    font-size: 0.95rem;
-    color: #a0bbc9;
-    line-height: 1.8;
-  }
-
-  /* 風景カードグリッド */
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    max-width: 1100px;
-    margin: 3rem auto;
-    padding: 0 1.5rem;
-  }
-
-  .card {
-    border-radius: 10px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.15);
-  }
-
-  /* イラスト風の風景SVGエリア */
-  .card-visual {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    display: block;
-  }
-
-  .card-body {
-    padding: 1.1rem 1.3rem 1.4rem;
-  }
-  .card-body h2 {
-    font-size: 1.1rem;
+  .route .from { color: var(--wave); }
+  .route .to   { color: var(--accent); }
+  .route .arrow { color: #aaa; font-size: 0.9rem; }
+  .depart-time {
+    font-size: 0.83rem;
+    color: #556;
     margin-bottom: 0.4rem;
-    color: var(--wave);
   }
-  .card-body p {
-    font-size: 0.875rem;
+  .comment {
+    font-size: 0.85rem;
     color: #445;
-    line-height: 1.85;
+    line-height: 1.7;
+    margin-bottom: 0.6rem;
   }
-
-  /* フッター */
-  footer {
-    text-align: center;
-    padding: 2.5rem 1rem;
+  .match-btn {
+    padding: 0.45rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+    transition: opacity 0.15s;
+  }
+  .match-btn.want  { background: var(--green); }
+  .match-btn.offer { background: var(--accent); }
+  .match-btn:active { opacity: 0.75; }
+  .matched-label {
+    display: inline-block;
     font-size: 0.8rem;
-    color: #778;
-    border-top: 1px solid #e0ddd8;
+    color: #889;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.35rem 0.8rem;
+  }
+  .empty { text-align:center; color:#aaa; font-size:0.9rem; padding: 2rem 0; }
+
+  /* 通知トースト */
+  #toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.65rem 1.3rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 100;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* 説明 */
+  .intro {
+    font-size: 0.85rem;
+    color: #556;
+    line-height: 1.8;
+    background: var(--light);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.2rem;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <p class="sub">宮城県 · 三陸復興国立公園</p>
-  <h1>気仙沼の<span>風景</span></h1>
-  <p>漁港の朝霧、リアス式海岸の入り江、<br>大島の緑――港町の四季をめぐる。</p>
+  <h1>のっけて！<span>気仙沼</span></h1>
+  <p>地域のちょっとした移動を、助け合いで。</p>
 </header>
 
-<div class="gallery">
-
-  <!-- 気仙沼港 -->
-  <div class="card">
-    <svg class="card-visual" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-      <!-- 空 -->
-      <rect width="320" height="180" fill="#d6eaf8"/>
-      <!-- 朝焼け -->
-      <ellipse cx="160" cy="90" rx="200" ry="90" fill="#fbe4ca" opacity="0.45"/>
-      <!-- 太陽 -->
-      <circle cx="230" cy="38" r="18" fill="#f5a623" opacity="0.85"/>
-      <!-- 霞 -->
-      <rect x="0" y="70" width="320" height="20" fill="#f0e0d0" opacity="0.3"/>
-      <!-- 海 -->
-      <rect x="0" y="115" width="320" height="65" fill="#2e6f8e"/>
-      <!-- 波 -->
-      <path d="M0 125 Q40 118 80 125 Q120 132 160 125 Q200 118 240 125 Q280 132 320 125" stroke="#4a90a4" stroke-width="2" fill="none" opacity="0.6"/>
-      <path d="M0 138 Q40 131 80 138 Q120 145 160 138 Q200 131 240 138 Q280 145 320 138" stroke="#4a90a4" stroke-width="2" fill="none" opacity="0.4"/>
-      <!-- 山 -->
-      <polygon points="0,115 60,65 120,115" fill="#4a7a5a" opacity="0.7"/>
-      <polygon points="50,115 130,50 210,115" fill="#3d6b4f" opacity="0.8"/>
-      <polygon points="160,115 260,60 320,115" fill="#4a7a5a" opacity="0.6"/>
-      <!-- 船 -->
-      <rect x="110" y="110" width="50" height="12" rx="2" fill="#1b2a3a"/>
-      <polygon points="110,110 135,95 160,110" fill="#c8451f"/>
-      <!-- 煙突 -->
-      <rect x="128" y="100" width="4" height="10" fill="#1b2a3a"/>
-      <!-- 港施設 -->
-      <rect x="20" y="95" width="30" height="20" fill="#8a9ba8"/>
-      <rect x="55" y="100" width="15" height="15" fill="#6a8a98"/>
-      <rect x="15" y="90" width="6" height="25" fill="#556677"/>
-    </svg>
-    <div class="card-body">
-      <h2>気仙沼港の夜明け</h2>
-      <p>三陸随一の漁港。カツオ・サンマ・フカヒレで知られ、早朝には大型漁船が次々と入港します。朝霧の中に浮かぶ船影は、港町ならではの光景です。</p>
-    </div>
-  </div>
-
-  <!-- 大島 -->
-  <div class="card">
-    <svg class="card-visual" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-      <!-- 空 -->
-      <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#87ceeb"/>
-        <stop offset="100%" stop-color="#d6eaf8"/>
-      </linearGradient>
-      <rect width="320" height="180" fill="url(#sky2)"/>
-      <!-- 雲 -->
-      <ellipse cx="70" cy="35" rx="40" ry="14" fill="white" opacity="0.85"/>
-      <ellipse cx="100" cy="28" rx="30" ry="12" fill="white" opacity="0.85"/>
-      <ellipse cx="240" cy="50" rx="35" ry="12" fill="white" opacity="0.75"/>
-      <!-- 海 -->
-      <rect x="0" y="120" width="320" height="60" fill="#1a8ab4"/>
-      <!-- 水面キラキラ -->
-      <path d="M10 135 Q30 128 50 135" stroke="white" stroke-width="1.5" fill="none" opacity="0.4"/>
-      <path d="M80 142 Q110 135 140 142" stroke="white" stroke-width="1.5" fill="none" opacity="0.3"/>
-      <path d="M200 130 Q230 123 260 130" stroke="white" stroke-width="1.5" fill="none" opacity="0.4"/>
-      <!-- 大島 本体 -->
-      <ellipse cx="160" cy="118" rx="120" ry="30" fill="#3d6b4f"/>
-      <!-- 島の緑 -->
-      <ellipse cx="120" cy="108" rx="40" ry="20" fill="#4a8a5a"/>
-      <ellipse cx="200" cy="105" rx="45" ry="22" fill="#4a8a5a"/>
-      <ellipse cx="160" cy="100" rx="50" ry="25" fill="#5a9a6a"/>
-      <!-- 樹木 -->
-      <polygon points="140,100 148,70 156,100" fill="#2e6b3e"/>
-      <polygon points="158,98 168,62 178,98" fill="#2e6b3e"/>
-      <polygon points="175,103 183,75 191,103" fill="#3a7a4a"/>
-      <!-- 橋 -->
-      <rect x="30" y="118" width="80" height="4" fill="#8a9ba8"/>
-      <rect x="40" y="108" width="4" height="14" fill="#7a8b98"/>
-      <rect x="100" y="108" width="4" height="14" fill="#7a8b98"/>
-      <path d="M42 110 Q70 100 102 110" stroke="#9aabb8" stroke-width="2" fill="none"/>
-    </svg>
-    <div class="card-body">
-      <h2>気仙沼大島と大島大橋</h2>
-      <p>「緑の真珠」と呼ばれる有人離島。2019年に開通した大島大橋（通称・鶴亀大橋）で本土と繋がり、椿や森林浴のスポットとして人気です。</p>
-    </div>
-  </div>
-
-  <!-- リアス式海岸 -->
-  <div class="card">
-    <svg class="card-visual" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-      <!-- 空 -->
-      <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#5b9bd5"/>
-        <stop offset="100%" stop-color="#a8d4f0"/>
-      </linearGradient>
-      <rect width="320" height="180" fill="url(#sky3)"/>
-      <!-- 入り江 -->
-      <path d="M0 180 L0 100 Q30 80 60 100 Q90 120 120 90 Q150 60 180 85 Q210 110 240 80 Q270 50 320 75 L320 180 Z" fill="#1a6a9a"/>
-      <!-- 山 奥 -->
-      <polygon points="0,110 50,60 100,110" fill="#5a7a5a" opacity="0.6"/>
-      <polygon points="60,100 120,45 180,100" fill="#4a6a4a" opacity="0.7"/>
-      <polygon points="140,95 210,35 280,95" fill="#5a7a5a" opacity="0.65"/>
-      <polygon points="240,90 300,40 360,90" fill="#4a6a4a" opacity="0.55"/>
-      <!-- 前景の岬 -->
-      <path d="M0 180 L0 130 Q20 120 40 130 Q60 140 80 125 L80 180Z" fill="#3d5a3d"/>
-      <path d="M240 180 L240 120 Q270 105 300 120 Q315 128 320 125 L320 180Z" fill="#3d5a3d"/>
-      <!-- 水面 -->
-      <path d="M0 145 Q80 135 160 145 Q240 155 320 145" stroke="#4a9abe" stroke-width="2" fill="none" opacity="0.5"/>
-      <path d="M0 158 Q80 148 160 158 Q240 168 320 158" stroke="#4a9abe" stroke-width="1.5" fill="none" opacity="0.3"/>
-    </svg>
-    <div class="card-body">
-      <h2>リアス式海岸の入り江</h2>
-      <p>複雑に入り組んだリアス式海岸が作り出す静かな入り江。エメラルドグリーンの海と緑の山々が織り成す景色は、三陸海岸を代表する絶景のひとつです。</p>
-    </div>
-  </div>
-
-  <!-- 魚市場・フカヒレ -->
-  <div class="card">
-    <svg class="card-visual" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-      <!-- 背景 -->
-      <rect width="320" height="180" fill="#f0ece4"/>
-      <!-- 建物 -->
-      <rect x="0" y="70" width="320" height="110" fill="#d8d0c4"/>
-      <!-- 市場屋根 -->
-      <polygon points="0,70 160,30 320,70" fill="#8a6a5a"/>
-      <polygon points="10,70 160,35 310,70" fill="#9a7a6a"/>
-      <!-- 窓 -->
-      <rect x="30" y="85" width="25" height="20" rx="2" fill="#7ab0ca" opacity="0.8"/>
-      <rect x="70" y="85" width="25" height="20" rx="2" fill="#7ab0ca" opacity="0.8"/>
-      <rect x="190" y="85" width="25" height="20" rx="2" fill="#7ab0ca" opacity="0.8"/>
-      <rect x="230" y="85" width="25" height="20" rx="2" fill="#7ab0ca" opacity="0.8"/>
-      <!-- 入口 -->
-      <rect x="130" y="100" width="60" height="50" rx="3" fill="#5a4a3a"/>
-      <rect x="138" y="108" width="22" height="42" rx="2" fill="#8a7060" opacity="0.6"/>
-      <rect x="162" y="108" width="22" height="42" rx="2" fill="#8a7060" opacity="0.6"/>
-      <!-- のぼり旗 -->
-      <rect x="100" y="60" width="3" height="60" fill="#5a4a3a"/>
-      <rect x="103" y="65" width="22" height="35" fill="#c8451f"/>
-      <text x="107" y="80" font-size="10" fill="white" font-family="sans-serif">フ</text>
-      <text x="107" y="92" font-size="10" fill="white" font-family="sans-serif">カ</text>
-      <rect x="210" y="58" width="3" height="62" fill="#5a4a3a"/>
-      <rect x="213" y="63" width="22" height="35" fill="#c8451f"/>
-      <text x="217" y="78" font-size="10" fill="white" font-family="sans-serif">魚</text>
-      <text x="217" y="90" font-size="10" fill="white" font-family="sans-serif">市</text>
-      <!-- 地面 -->
-      <rect x="0" y="150" width="320" height="30" fill="#c0b8ac"/>
-    </svg>
-    <div class="card-body">
-      <h2>気仙沼魚市場とフカヒレ</h2>
-      <p>国内屈指の水揚げ量を誇る気仙沼の魚市場。特にフカヒレの産地として有名で、全国シェアの約70%を占めます。市場周辺にはフカヒレラーメンや姿煮を楽しめる店が並びます。</p>
-    </div>
-  </div>
-
-  <!-- 唐桑半島 -->
-  <div class="card">
-    <svg class="card-visual" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-      <!-- 空 夕暮れ -->
-      <linearGradient id="sunset" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#2c3e6e"/>
-        <stop offset="40%" stop-color="#c0562a"/>
-        <stop offset="100%" stop-color="#e8a050"/>
-      </linearGradient>
-      <rect width="320" height="180" fill="url(#sunset)"/>
-      <!-- 太陽（沈みかけ） -->
-      <circle cx="160" cy="100" r="22" fill="#f5e060" opacity="0.9"/>
-      <rect x="0" y="100" width="320" height="80" fill="#1a3a5a" opacity="0.5"/>
-      <!-- 海 夕暮れ -->
-      <rect x="0" y="110" width="320" height="70" fill="#1a3a6a"/>
-      <!-- 光の道 -->
-      <path d="M135 180 L148 110 L172 110 L185 180Z" fill="#f5e060" opacity="0.25"/>
-      <!-- 岬の岩 -->
-      <path d="M0 180 L0 120 Q15 105 35 115 Q50 122 60 110 Q75 95 85 110 L85 180Z" fill="#2a3a2a"/>
-      <path d="M235 180 L235 115 Q250 100 270 112 Q285 120 300 105 Q310 95 320 108 L320 180Z" fill="#2a3a2a"/>
-      <!-- 波反射 -->
-      <path d="M50 145 Q100 138 150 145 Q200 152 250 145" stroke="#6ab0d0" stroke-width="1.5" fill="none" opacity="0.4"/>
-      <path d="M30 160 Q90 153 150 160 Q210 167 270 160" stroke="#6ab0d0" stroke-width="1" fill="none" opacity="0.3"/>
-    </svg>
-    <div class="card-body">
-      <h2>唐桑半島の夕暮れ</h2>
-      <p>気仙沼湾の東に突き出した唐桑半島。巨釜・半造など奇岩が連なる海岸線と、水平線に沈む夕日が絶景を生み出します。三陸ジオパークの見どころのひとつです。</p>
-    </div>
-  </div>
-
-  <!-- 秋の山並み -->
-  <div class="card">
-    <svg class="card-visual" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-      <!-- 空 -->
-      <linearGradient id="autumnsky" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#a8c8e8"/>
-        <stop offset="100%" stop-color="#d8e8f0"/>
-      </linearGradient>
-      <rect width="320" height="180" fill="url(#autumnsky)"/>
-      <!-- 雲 -->
-      <ellipse cx="80" cy="30" rx="50" ry="15" fill="white" opacity="0.7"/>
-      <ellipse cx="110" cy="22" rx="38" ry="12" fill="white" opacity="0.7"/>
-      <ellipse cx="250" cy="40" rx="45" ry="13" fill="white" opacity="0.6"/>
-      <!-- 奥の山 -->
-      <polygon points="0,130 80,55 160,130" fill="#6a6a9a" opacity="0.5"/>
-      <polygon points="80,130 180,40 280,130" fill="#7a7aaa" opacity="0.55"/>
-      <polygon points="180,130 280,60 380,130" fill="#6a6a9a" opacity="0.45"/>
-      <!-- 紅葉の山 -->
-      <polygon points="0,140 60,80 120,140" fill="#b85a20"/>
-      <polygon points="40,140 110,70 180,140" fill="#c8703a"/>
-      <polygon points="100,140 180,75 260,140" fill="#d4823a"/>
-      <polygon points="170,140 250,80 320,140" fill="#b85a20"/>
-      <!-- 紅葉ディテール -->
-      <circle cx="60" cy="95" r="12" fill="#e8904a" opacity="0.7"/>
-      <circle cx="110" cy="88" r="15" fill="#d4602a" opacity="0.7"/>
-      <circle cx="160" cy="92" r="13" fill="#e8a050" opacity="0.7"/>
-      <circle cx="220" cy="90" r="14" fill="#d4823a" opacity="0.7"/>
-      <!-- 地面・川 -->
-      <rect x="0" y="140" width="320" height="40" fill="#7a6a5a"/>
-      <path d="M120 180 Q140 155 150 140 Q160 125 175 140 Q185 155 195 180" fill="#5a9aba" opacity="0.6"/>
-    </svg>
-    <div class="card-body">
-      <h2>秋の三陸山並み</h2>
-      <p>気仙沼の内陸部には紅葉が美しい山々が広がります。針葉樹と広葉樹が混ざり合う森は、秋になると赤・橙・黄に染まり、渓流沿いの紅葉散策を楽しめます。</p>
-    </div>
-  </div>
-
+<div class="tabs">
+  <button class="tab want active" onclick="showTab('want')">乗りたい</button>
+  <button class="tab offer" onclick="showTab('offer')">乗せたい</button>
+  <button class="tab" onclick="showTab('board')">掲示板</button>
 </div>
 
-<footer>
-  &copy; 2026 気仙沼の風景 · 宮城県気仙沼市
-</footer>
+<!-- 乗りたいフォーム -->
+<div class="pane active" id="pane-want">
+  <div class="intro">目的地と出発地を入力して投稿しましょう。近くにいるドライバーが声をかけてくれます。</div>
+  <div class="form-card">
+    <h2><span class="badge want">乗りたい</span> 移動リクエストを投稿</h2>
+    <div class="row2">
+      <div>
+        <label>出発地</label>
+        <input id="w-from" type="text" placeholder="例：本郷、唐桑">
+      </div>
+      <div>
+        <label>目的地</label>
+        <input id="w-to" type="text" placeholder="例：気仙沼駅、病院">
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label>希望時刻</label>
+        <input id="w-time" type="time">
+      </div>
+      <div>
+        <label>名前（ニックネーム可）</label>
+        <input id="w-name" type="text" placeholder="例：田中さん">
+      </div>
+    </div>
+    <label>一言コメント</label>
+    <textarea id="w-comment" placeholder="例：病院の帰りで荷物があります。どうぞよろしくお願いします。"></textarea>
+    <button class="btn want" onclick="postWant()">乗せてください！と投稿する</button>
+  </div>
+</div>
 
+<!-- 乗せたいフォーム -->
+<div class="pane" id="pane-offer">
+  <div class="intro">これから移動するルートを投稿しましょう。ルートが近い人を乗せてあげることができます。</div>
+  <div class="form-card">
+    <h2><span class="badge offer">乗せたい</span> ドライブルートを投稿</h2>
+    <div class="row2">
+      <div>
+        <label>出発地</label>
+        <input id="o-from" type="text" placeholder="例：気仙沼駅前">
+      </div>
+      <div>
+        <label>向かう方向・目的地</label>
+        <input id="o-to" type="text" placeholder="例：唐桑方面、本吉方面">
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label>出発時刻</label>
+        <input id="o-time" type="time">
+      </div>
+      <div>
+        <label>名前（ニックネーム可）</label>
+        <input id="o-name" type="text" placeholder="例：佐藤さん">
+      </div>
+    </div>
+    <label>一言コメント</label>
+    <textarea id="o-comment" placeholder="例：唐桑まで寄り道OKです。2〜3名乗れます。"></textarea>
+    <button class="btn offer" onclick="postOffer()">乗せます！と投稿する</button>
+  </div>
+</div>
+
+<!-- 掲示板 -->
+<div class="pane" id="pane-board">
+  <div class="board-section">
+    <h3>乗りたい人</h3>
+    <div id="board-want"></div>
+  </div>
+  <div class="board-section">
+    <h3>乗せたい人</h3>
+    <div id="board-offer"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'kesennuma-hitchhike-v1';
+
+// デモ用初期データ
+const DEMO = [
+  { id:'d1', type:'want', name:'鈴木さん', from:'本郷', to:'気仙沼市立病院', departTime:'10:30', comment:'定期通院です。荷物は少なめです。どうぞよろしくお願いします。', status:'open', createdAt: Date.now()-1000*60*25 },
+  { id:'d2', type:'offer', name:'阿部さん', from:'気仙沼駅前', to:'唐桑方面', departTime:'11:00', comment:'唐桑の実家まで向かいます。途中で寄り道も大丈夫です。3名まで乗れます。', status:'open', createdAt: Date.now()-1000*60*18 },
+  { id:'d3', type:'want', name:'佐々木さん', from:'階上（はしかみ）', to:'気仙沼駅', departTime:'13:00', comment:'買い物帰りで少し荷物があります。よろしくお願いします。', status:'open', createdAt: Date.now()-1000*60*10 },
+  { id:'d4', type:'offer', name:'小野寺さん', from:'気仙沼市内', to:'本吉・南三陸方面', departTime:'14:30', comment:'本吉まで用事があります。途中の方もどうぞ。', status:'open', createdAt: Date.now()-1000*60*5 },
+];
+
+function load() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) return JSON.parse(raw);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DEMO));
+  return DEMO;
+}
+function save(posts) { localStorage.setItem(STORAGE_KEY, JSON.stringify(posts)); }
+
+function timeAgo(ts) {
+  const m = Math.floor((Date.now() - ts) / 60000);
+  if (m < 1) return 'たった今';
+  if (m < 60) return m + '分前';
+  return Math.floor(m/60) + '時間前';
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const ids = ['want','offer','board'];
+    t.classList.toggle('active', ids[i] === tab);
+  });
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane-' + tab).classList.add('active');
+  if (tab === 'board') renderBoard();
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function renderBoard() {
+  const posts = load();
+  const wants  = posts.filter(p => p.type === 'want');
+  const offers = posts.filter(p => p.type === 'offer');
+
+  document.getElementById('board-want').innerHTML  = renderCards(wants,  'want');
+  document.getElementById('board-offer').innerHTML = renderCards(offers, 'offer');
+}
+
+function renderCards(posts, type) {
+  if (!posts.length) return '<div class="empty">投稿がありません</div>';
+  return posts.sort((a,b) => b.createdAt - a.createdAt).map(p => {
+    const actionLabel = type === 'want' ? '乗せます' : '乗ります';
+    const actionClass = type === 'want' ? 'want' : 'offer';
+    const action = p.status === 'matched'
+      ? `<span class="matched-label">マッチング済み</span>`
+      : `<button class="match-btn ${actionClass}" onclick="match('${p.id}')">${actionLabel}</button>`;
+    return `
+    <div class="post-card ${p.status === 'matched' ? 'matched' : ''}">
+      <div class="post-header">
+        <span class="badge ${type}">${type === 'want' ? '乗りたい' : '乗せたい'}</span>
+        <span class="post-name">${esc(p.name)}</span>
+        <span class="post-time">${timeAgo(p.createdAt)}</span>
+      </div>
+      <div class="route">
+        <span class="from">${esc(p.from)}</span>
+        <span class="arrow">→</span>
+        <span class="to">${esc(p.to)}</span>
+      </div>
+      <div class="depart-time">希望時刻：${esc(p.departTime)}</div>
+      ${p.comment ? `<div class="comment">${esc(p.comment)}</div>` : ''}
+      ${action}
+    </div>`;
+  }).join('');
+}
+
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function match(id) {
+  const posts = load();
+  const p = posts.find(x => x.id === id);
+  if (!p || p.status === 'matched') return;
+  p.status = 'matched';
+  save(posts);
+  renderBoard();
+  const msg = p.type === 'want'
+    ? `${p.name} さんに「乗せます」と伝えました！`
+    : `${p.name} さんに「乗ります」と伝えました！`;
+  toast(msg);
+}
+
+function uid() { return 'p' + Date.now() + Math.random().toString(36).slice(2,6); }
+
+function postWant() {
+  const from = document.getElementById('w-from').value.trim();
+  const to   = document.getElementById('w-to').value.trim();
+  const time = document.getElementById('w-time').value;
+  const name = document.getElementById('w-name').value.trim();
+  const comment = document.getElementById('w-comment').value.trim();
+  if (!from || !to || !name) { toast('出発地・目的地・名前を入力してください'); return; }
+  const posts = load();
+  posts.push({ id:uid(), type:'want', name, from, to, departTime:time||'未定', comment, status:'open', createdAt:Date.now() });
+  save(posts);
+  ['w-from','w-to','w-time','w-name','w-comment'].forEach(id => document.getElementById(id).value = '');
+  toast('投稿しました！掲示板を確認してください');
+  showTab('board');
+}
+
+function postOffer() {
+  const from = document.getElementById('o-from').value.trim();
+  const to   = document.getElementById('o-to').value.trim();
+  const time = document.getElementById('o-time').value;
+  const name = document.getElementById('o-name').value.trim();
+  const comment = document.getElementById('o-comment').value.trim();
+  if (!from || !to || !name) { toast('出発地・方向・名前を入力してください'); return; }
+  const posts = load();
+  posts.push({ id:uid(), type:'offer', name, from, to, departTime:time||'未定', comment, status:'open', createdAt:Date.now() });
+  save(posts);
+  ['o-from','o-to','o-time','o-name','o-comment'].forEach(id => document.getElementById(id).value = '');
+  toast('投稿しました！掲示板を確認してください');
+  showTab('board');
+}
+</script>
 </body>
 </html>
