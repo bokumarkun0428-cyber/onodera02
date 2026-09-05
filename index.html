@@ -181,13 +181,32 @@
     70%  { transform: scale(1.07) translateY(-8px);  opacity: 1; }
     100% { transform: scale(1)   translateY(0);      opacity: 1; }
   }
-  .match-emoji {
-    font-size: 5.5rem; display: block; margin-bottom: 0.4rem;
-    animation: bigpulse 0.9s ease-in-out infinite;
+  /* ホヤちゃんダンス */
+  .hoya-wrap { display: flex; justify-content: center; margin-bottom: 0.3rem; }
+  #hoya-svg {
+    animation: hoya-bounce 0.52s ease-in-out infinite alternate;
+    transform-origin: 50px 130px;
+    filter: drop-shadow(0 6px 20px rgba(224,104,32,0.7));
   }
-  @keyframes bigpulse {
-    0%, 100% { transform: scale(1) rotate(-3deg); }
-    50%       { transform: scale(1.2) rotate(3deg); }
+  @keyframes hoya-bounce {
+    from { transform: rotate(-11deg) translateY(0px) scaleX(1); }
+    to   { transform: rotate(11deg)  translateY(-16px) scaleX(0.93); }
+  }
+  #hoya-arm-l {
+    animation: hoya-arm-l 0.52s ease-in-out infinite alternate;
+    transform-origin: 27px 76px;
+  }
+  @keyframes hoya-arm-l {
+    from { transform: rotate(5deg); }
+    to   { transform: rotate(-42deg); }
+  }
+  #hoya-arm-r {
+    animation: hoya-arm-r 0.52s ease-in-out infinite alternate;
+    transform-origin: 73px 76px;
+  }
+  @keyframes hoya-arm-r {
+    from { transform: rotate(-42deg); }
+    to   { transform: rotate(5deg); }
   }
   .match-title {
     font-size: 2.1rem; font-weight: 900; letter-spacing: 0.04em;
@@ -383,7 +402,57 @@
 
   <!-- Phase 1: お祝い演出 -->
   <div id="phase1" class="match-box">
-    <span class="match-emoji">🎉</span>
+    <div class="hoya-wrap">
+      <svg id="hoya-svg" viewBox="0 0 100 148" width="140" height="207" xmlns="http://www.w3.org/2000/svg">
+        <!-- 体（メイン） -->
+        <ellipse cx="50" cy="90" rx="37" ry="46" fill="#e06820"/>
+        <!-- ぼこぼこ模様 -->
+        <circle cx="32" cy="76" r="7"  fill="#c05010" opacity="0.5"/>
+        <circle cx="67" cy="82" r="8"  fill="#c05010" opacity="0.45"/>
+        <circle cx="43" cy="108" r="6" fill="#c05010" opacity="0.4"/>
+        <circle cx="64" cy="114" r="7" fill="#c05010" opacity="0.42"/>
+        <circle cx="38" cy="100" r="4" fill="#c05010" opacity="0.35"/>
+        <circle cx="70" cy="100" r="5" fill="#c05010" opacity="0.38"/>
+        <!-- 左のサイフォン（大） -->
+        <rect x="28" y="16" width="15" height="38" rx="7.5" fill="#c84e12"/>
+        <ellipse cx="35.5" cy="16" rx="7.5" ry="5" fill="#200606"/>
+        <ellipse cx="35.5" cy="16" rx="4"   ry="3" fill="#6a1010" opacity="0.6"/>
+        <!-- 右のサイフォン（小） -->
+        <rect x="56" y="8"  width="12" height="30" rx="6"   fill="#c84e12"/>
+        <ellipse cx="62"   cy="8"  rx="6"   ry="4" fill="#200606"/>
+        <ellipse cx="62"   cy="8"  rx="3.2" ry="2.2" fill="#6a1010" opacity="0.6"/>
+        <!-- 目（白目） -->
+        <circle cx="38" cy="80" r="13" fill="white"/>
+        <circle cx="62" cy="80" r="13" fill="white"/>
+        <!-- 瞳 -->
+        <circle cx="40" cy="80" r="8"  fill="#18202e"/>
+        <circle cx="64" cy="80" r="8"  fill="#18202e"/>
+        <!-- ハイライト -->
+        <circle cx="44" cy="75" r="3.5" fill="white"/>
+        <circle cx="68" cy="75" r="3.5" fill="white"/>
+        <!-- ほっぺ -->
+        <ellipse cx="25" cy="94" rx="8" ry="5" fill="#f08060" opacity="0.55"/>
+        <ellipse cx="75" cy="94" rx="8" ry="5" fill="#f08060" opacity="0.55"/>
+        <!-- 口（にっこり） -->
+        <path d="M38 98 Q50 110 62 98" stroke="#300808" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- 左腕 -->
+        <g id="hoya-arm-l">
+          <line x1="27" y1="88" x2="14" y2="74" stroke="#c84e12" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="13" cy="72" r="7" fill="#d86018"/>
+        </g>
+        <!-- 右腕 -->
+        <g id="hoya-arm-r">
+          <line x1="73" y1="85" x2="86" y2="74" stroke="#c84e12" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="87" cy="72" r="7" fill="#d86018"/>
+        </g>
+        <!-- 足 -->
+        <rect x="37" y="132" width="11" height="18" rx="5.5" fill="#c84e12"/>
+        <rect x="52" y="132" width="11" height="18" rx="5.5" fill="#c84e12"/>
+        <!-- 足先 -->
+        <ellipse cx="42.5" cy="150" rx="10" ry="5.5" fill="#a83c0c"/>
+        <ellipse cx="57.5" cy="150" rx="10" ry="5.5" fill="#a83c0c"/>
+      </svg>
+    </div>
     <h2 class="match-title">マッチング成功！</h2>
     <p class="match-subtitle" id="match-subtitle"></p>
     <div class="match-route-badge" id="match-route-badge"></div>
