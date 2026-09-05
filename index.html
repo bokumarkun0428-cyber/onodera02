@@ -38,317 +38,230 @@
     display: flex;
     border-bottom: 2px solid var(--border);
     background: var(--card);
-    position: sticky;
-    top: 0;
-    z-index: 50;
+    position: sticky; top: 0; z-index: 50;
   }
   .tab {
-    flex: 1;
-    padding: 0.85rem 0.5rem;
-    text-align: center;
-    font-size: 0.9rem;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    background: none;
-    color: #778;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
+    flex: 1; padding: 0.85rem 0.5rem;
+    text-align: center; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; border: none; background: none; color: #778;
+    border-bottom: 3px solid transparent; margin-bottom: -2px;
     transition: color 0.15s;
   }
-  .tab.active { color: var(--wave); border-bottom-color: var(--wave); }
-  .tab.active.want { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab.active          { color: var(--wave);   border-bottom-color: var(--wave); }
+  .tab.active.want     { color: var(--accent); border-bottom-color: var(--accent); }
 
   .pane { display: none; padding: 1.2rem 1rem 5rem; max-width: 640px; margin: 0 auto; }
   .pane.active { display: block; }
 
   .intro {
-    font-size: 0.85rem;
-    color: #556;
-    line-height: 1.8;
-    background: var(--light);
-    border-radius: 8px;
-    padding: 0.85rem 1rem;
-    margin-bottom: 1.2rem;
+    font-size: 0.85rem; color: #556; line-height: 1.8;
+    background: var(--light); border-radius: 8px;
+    padding: 0.85rem 1rem; margin-bottom: 1.2rem;
   }
 
   /* フォームカード */
   .form-card {
-    background: var(--card);
-    border-radius: 10px;
-    padding: 1.2rem;
-    border: 1px solid var(--border);
-    margin-bottom: 1rem;
+    background: var(--card); border-radius: 10px;
+    padding: 1.2rem; border: 1px solid var(--border); margin-bottom: 1rem;
   }
-  .form-card h2 {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+  .form-card h2 { font-size: 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
   .badge {
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 0.2em 0.6em;
-    border-radius: 999px;
-    color: #fff;
+    display: inline-block; font-size: 0.72rem; font-weight: 700;
+    padding: 0.2em 0.6em; border-radius: 999px; color: #fff;
   }
   .badge.want  { background: var(--accent); }
   .badge.offer { background: var(--green); }
 
   label { display: block; font-size: 0.82rem; color: #556; margin-bottom: 0.25rem; margin-top: 0.8rem; }
   input, textarea {
-    width: 100%;
-    padding: 0.55rem 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-family: inherit;
-    background: #fafaf8;
+    width: 100%; padding: 0.55rem 0.75rem; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 0.95rem; font-family: inherit; background: #fafaf8;
   }
   textarea { resize: vertical; min-height: 70px; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 
   .btn {
-    display: block;
-    width: 100%;
-    margin-top: 1.1rem;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    color: #fff;
-    transition: opacity 0.15s;
+    display: block; width: 100%; margin-top: 1.1rem; padding: 0.75rem;
+    border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; color: #fff; transition: opacity 0.15s;
   }
   .btn:active { opacity: 0.8; }
   .btn.want  { background: var(--accent); }
   .btn.offer { background: var(--green); }
 
-  /* 地図パネル（フォーム内） */
-  .map-panel {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    overflow: hidden;
-  }
+  /* 地図パネル */
+  .map-panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 1rem; overflow: hidden; }
   .map-panel-header {
-    padding: 0.8rem 1.1rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--wave);
-    user-select: none;
+    padding: 0.8rem 1.1rem; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
+    color: var(--wave); user-select: none;
   }
   .map-panel-header:hover { background: var(--light); }
   .map-panel-header .chevron { margin-left: auto; transition: transform 0.2s; font-style: normal; }
   .map-panel-header.open .chevron { transform: rotate(180deg); }
   .map-panel-body { display: none; }
   .map-panel-body.open { display: block; }
-
   .mode-row {
-    display: flex;
-    gap: 0.5rem;
-    padding: 0.65rem 0.9rem;
-    background: #f4f2ed;
-    border-top: 1px solid var(--border);
-    flex-wrap: wrap;
+    display: flex; gap: 0.5rem; padding: 0.65rem 0.9rem;
+    background: #f4f2ed; border-top: 1px solid var(--border); flex-wrap: wrap;
   }
   .mode-btn {
-    flex: 1;
-    min-width: 90px;
-    padding: 0.4rem 0.5rem;
-    border: 2px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    background: #fff;
-    color: #667;
-    transition: all 0.15s;
+    flex: 1; min-width: 90px; padding: 0.4rem 0.5rem;
+    border: 2px solid var(--border); border-radius: 6px; font-size: 0.8rem;
+    font-weight: 700; cursor: pointer; background: #fff; color: #667; transition: all 0.15s;
   }
-  .mode-btn.sel-from { border-color: var(--wave); color: var(--wave); background: var(--light); }
-  .mode-btn.sel-to   { border-color: var(--accent); color: var(--accent); background: #fdf0ec; }
+  .mode-btn.sel-from { border-color: var(--wave);   color: var(--wave);   background: var(--light); }
+  .mode-btn.sel-to   { border-color: var(--accent);  color: var(--accent);  background: #fdf0ec; }
   .gps-btn { flex: none !important; border-color: var(--green) !important; color: var(--green) !important; }
-
   .form-leaflet-map { height: 250px; }
-  .map-hint {
-    padding: 0.45rem 0.9rem;
-    font-size: 0.76rem;
-    color: #778;
-    background: #f4f2ed;
-    border-top: 1px solid var(--border);
-  }
+  .map-hint { padding: 0.45rem 0.9rem; font-size: 0.76rem; color: #778; background: #f4f2ed; border-top: 1px solid var(--border); }
   .map-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem 1rem;
-    padding: 0.5rem 0.9rem;
-    font-size: 0.76rem;
-    color: #556;
-    background: #eeeae3;
-    border-top: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1rem;
+    padding: 0.5rem 0.9rem; font-size: 0.76rem; color: #556;
+    background: #eeeae3; border-top: 1px solid var(--border);
   }
-  .leg-dot {
-    display: inline-block;
-    width: 9px; height: 9px;
-    border-radius: 50%;
-    vertical-align: middle;
-    margin-right: 3px;
-    opacity: 0.85;
-  }
-  .leg-dash {
-    display: inline-block;
-    width: 16px; height: 3px;
-    border-radius: 2px;
-    vertical-align: middle;
-    margin-right: 3px;
-    opacity: 0.7;
-  }
+  .leg-dot  { display: inline-block; width:9px; height:9px; border-radius:50%; vertical-align:middle; margin-right:3px; opacity:.85; }
+  .leg-dash { display: inline-block; width:16px; height:3px; border-radius:2px; vertical-align:middle; margin-right:3px; opacity:.7; }
 
   /* 掲示板 */
   .board-section { margin-bottom: 1.8rem; }
-  .board-section h3 {
-    font-size: 0.82rem;
-    color: #778;
-    letter-spacing: 0.06em;
-    margin-bottom: 0.7rem;
-  }
-  .post-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem 1.1rem;
-    margin-bottom: 0.75rem;
-  }
+  .board-section h3 { font-size: 0.82rem; color: #778; letter-spacing: 0.06em; margin-bottom: 0.7rem; }
+  .post-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 0.75rem; }
   .post-card.matched { opacity: 0.5; }
-  .post-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.6rem;
-  }
+  .post-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
   .post-name { font-weight: 700; font-size: 0.95rem; }
   .post-ts   { font-size: 0.77rem; color: #889; margin-left: auto; }
-  .route-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 0.4rem;
-  }
+  .route-row { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
   .route-row .fr { color: var(--wave); }
   .route-row .to { color: var(--accent); }
   .route-row .ar { color: #bbb; }
   .depart-time { font-size: 0.82rem; color: #556; margin-bottom: 0.4rem; }
   .comment     { font-size: 0.84rem; color: #445; line-height: 1.75; margin-bottom: 0.65rem; }
   .card-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
-
-  .match-btn {
-    padding: 0.42rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.84rem;
-    font-weight: 700;
-    cursor: pointer;
-    color: #fff;
-  }
+  .match-btn { padding: 0.42rem 1rem; border: none; border-radius: 6px; font-size: 0.84rem; font-weight: 700; cursor: pointer; color: #fff; }
   .match-btn.want  { background: var(--green); }
   .match-btn.offer { background: var(--accent); }
-  .map-view-btn {
-    padding: 0.42rem 0.85rem;
-    border: 1.5px solid var(--wave);
-    border-radius: 6px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    cursor: pointer;
-    color: var(--wave);
-    background: var(--light);
-  }
-  .matched-label {
-    font-size: 0.8rem;
-    color: #889;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 0.32rem 0.75rem;
-  }
+  .map-view-btn { padding: 0.42rem 0.85rem; border: 1.5px solid var(--wave); border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer; color: var(--wave); background: var(--light); }
+  .matched-label { font-size: 0.8rem; color: #889; border: 1px solid #ccc; border-radius: 6px; padding: 0.32rem 0.75rem; }
   .no-map-note { font-size: 0.76rem; color: #aaa; }
   .empty { text-align:center; color:#aaa; font-size:0.9rem; padding: 2rem 0; }
 
+  /* 評価バッジ（カード内） */
+  .rating-badge { font-size: 0.78rem; color: #f5a623; font-weight: 700; white-space: nowrap; }
+  .rating-count { color: #aaa; font-weight: normal; font-size: 0.73rem; }
+
   /* ルートモーダル */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    z-index: 200;
-    padding: 3rem 1rem 1rem;
-    overflow-y: auto;
-    justify-content: center;
-  }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 200; padding: 3rem 1rem 1rem; overflow-y: auto; justify-content: center; }
   .modal-overlay.open { display: flex; }
-  .modal-box {
-    background: var(--card);
-    border-radius: 14px;
-    width: 100%;
-    max-width: 580px;
-    overflow: hidden;
-    align-self: flex-start;
-  }
-  .modal-hdr {
-    padding: 0.9rem 1.1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-  }
+  .modal-box { background: var(--card); border-radius: 14px; width: 100%; max-width: 580px; overflow: hidden; align-self: flex-start; }
+  .modal-hdr { padding: 0.9rem 1.1rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
   .modal-hdr h3 { font-size: 1rem; }
-  .modal-close {
-    border: none; background: none;
-    font-size: 1.5rem; line-height: 1;
-    cursor: pointer; color: #778;
-  }
+  .modal-close { border: none; background: none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: #778; }
   #route-map { height: 360px; }
-  .modal-info {
-    padding: 0.9rem 1.1rem;
-    font-size: 0.85rem;
-    color: #445;
-    line-height: 1.85;
-    border-top: 1px solid var(--border);
+  .modal-info { padding: 0.9rem 1.1rem; font-size: 0.85rem; color: #445; line-height: 1.85; border-top: 1px solid var(--border); }
+  .modal-route-row { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+
+  /* ===== マッチング演出オーバーレイ ===== */
+  #match-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 600;
+    background: rgba(10, 20, 35, 0.93);
+    align-items: center; justify-content: center;
+    padding: 2rem 1.5rem;
   }
-  .modal-route-row {
-    display: flex; align-items: center; gap: 0.5rem;
-    font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem;
+  #match-overlay.open { display: flex; }
+
+  /* Phase 1: 演出 */
+  .match-box {
+    text-align: center; color: #fff; max-width: 380px; width: 100%;
+    animation: pop-in 0.55s cubic-bezier(.34,1.56,.64,1) forwards;
   }
+  @keyframes pop-in {
+    0%   { transform: scale(0.35) translateY(50px); opacity: 0; }
+    70%  { transform: scale(1.07) translateY(-8px);  opacity: 1; }
+    100% { transform: scale(1)   translateY(0);      opacity: 1; }
+  }
+  .match-emoji {
+    font-size: 5.5rem; display: block; margin-bottom: 0.4rem;
+    animation: bigpulse 0.9s ease-in-out infinite;
+  }
+  @keyframes bigpulse {
+    0%, 100% { transform: scale(1) rotate(-3deg); }
+    50%       { transform: scale(1.2) rotate(3deg); }
+  }
+  .match-title {
+    font-size: 2.1rem; font-weight: 900; letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(120deg, #5bb8dc 0%, #f5a623 60%, #e87aba 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .match-subtitle { font-size: 0.92rem; color: #9ab8c8; margin-bottom: 1.2rem; line-height: 1.75; }
+  .match-route-badge {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px; padding: 0.65rem 1.3rem;
+    font-size: 1rem; font-weight: 700; margin-bottom: 1.8rem;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .match-route-badge .mfr { color: #5bb8dc; }
+  .match-route-badge .mto { color: #f5a623; }
+  .match-action-btn {
+    display: block; width: 100%; padding: 0.9rem;
+    background: linear-gradient(135deg, #2e6f8e, #5bb8dc);
+    border: none; border-radius: 10px; color: #fff;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    margin-bottom: 0.75rem; letter-spacing: 0.03em;
+    box-shadow: 0 4px 18px rgba(91,184,220,0.35);
+    transition: opacity 0.15s;
+  }
+  .match-action-btn:active { opacity: 0.82; }
+  .match-skip-btn { background: none; border: none; color: #6a8898; font-size: 0.85rem; cursor: pointer; padding: 0.3rem; }
+
+  /* Phase 2: 評価 */
+  .rating-box { text-align: center; color: #fff; max-width: 380px; width: 100%; animation: pop-in 0.45s cubic-bezier(.34,1.56,.64,1) forwards; }
+  .rating-box h2 { font-size: 1.4rem; margin-bottom: 0.3rem; }
+  .rating-target { font-size: 0.88rem; color: #9ab8c8; margin-bottom: 1.3rem; }
+  .star-row { font-size: 3.4rem; color: #344; margin-bottom: 0.25rem; cursor: pointer; letter-spacing: 0.05em; }
+  .star-row .s { display: inline-block; transition: color 0.12s, transform 0.12s; }
+  .star-row .s.lit { color: #f5a623; transform: scale(1.18); }
+  .star-row .s:hover { transform: scale(1.25); color: #f5a623; }
+  .rating-label { font-size: 0.85rem; color: #8ab4c8; margin-bottom: 1rem; min-height: 1.3em; }
+  .rating-comment {
+    width: 100%; padding: 0.65rem 0.85rem;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px; color: #fff; font-size: 0.9rem;
+    font-family: inherit; resize: vertical; min-height: 72px; margin-bottom: 1rem;
+  }
+  .rating-comment::placeholder { color: #5a7888; }
+  .rating-submit-btn {
+    display: block; width: 100%; padding: 0.85rem;
+    background: linear-gradient(135deg, #2e7d52, #4aaa78);
+    border: none; border-radius: 10px; color: #fff;
+    font-size: 1rem; font-weight: 700; cursor: pointer; margin-bottom: 0.75rem;
+    box-shadow: 0 4px 18px rgba(74,170,120,0.35);
+  }
+
+  /* Phase 3: 完了 */
+  .done-box { text-align: center; color: #fff; max-width: 320px; animation: pop-in 0.45s cubic-bezier(.34,1.56,.64,1) forwards; }
+  .done-icon { font-size: 4.5rem; margin-bottom: 0.8rem; }
+  .done-box h2 { font-size: 1.7rem; margin-bottom: 0.5rem; }
+  .done-box p  { font-size: 0.9rem; color: #9ab8c8; line-height: 1.8; }
+
+  /* confettiキャンバス */
+  #confetti-canvas { position:fixed; inset:0; pointer-events:none; z-index:700; display:none; }
 
   /* トースト */
   #toast {
-    position: fixed;
-    bottom: 1.5rem;
-    left: 50%;
+    position: fixed; bottom: 1.5rem; left: 50%;
     transform: translateX(-50%) translateY(80px);
-    background: var(--ink);
-    color: var(--paper);
-    padding: 0.65rem 1.3rem;
-    border-radius: 8px;
-    font-size: 0.88rem;
-    opacity: 0;
+    background: var(--ink); color: var(--paper);
+    padding: 0.65rem 1.3rem; border-radius: 8px;
+    font-size: 0.88rem; opacity: 0;
     transition: transform 0.3s, opacity 0.3s;
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: 400;
+    pointer-events: none; white-space: nowrap; z-index: 400;
   }
   #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  /* Leaflet の z-index を sticky ヘッダの下に固定 */
   .leaflet-top, .leaflet-bottom { z-index: 5 !important; }
 </style>
 </head>
@@ -382,11 +295,9 @@
     <textarea id="w-comment" placeholder="例：病院の帰りで荷物があります。よろしくお願いします。"></textarea>
     <button class="btn want" onclick="postWant()">乗せてください！と投稿する</button>
   </div>
-
-  <div class="map-panel" id="mp-want">
+  <div class="map-panel">
     <div class="map-panel-header" id="mph-want" onclick="toggleMapPanel('want')">
-      🗺️ 地図で指定 ＋ 乗せたい投稿を確認
-      <em class="chevron">▼</em>
+      🗺️ 地図で指定 ＋ 乗せたい投稿を確認 <em class="chevron">▼</em>
     </div>
     <div class="map-panel-body" id="mpb-want">
       <div class="mode-row">
@@ -422,11 +333,9 @@
     <textarea id="o-comment" placeholder="例：唐桑まで寄り道OKです。2〜3名乗れます。"></textarea>
     <button class="btn offer" onclick="postOffer()">乗せます！と投稿する</button>
   </div>
-
-  <div class="map-panel" id="mp-offer">
+  <div class="map-panel">
     <div class="map-panel-header" id="mph-offer" onclick="toggleMapPanel('offer')">
-      🗺️ 地図で指定 ＋ 乗りたい投稿を確認
-      <em class="chevron">▼</em>
+      🗺️ 地図で指定 ＋ 乗りたい投稿を確認 <em class="chevron">▼</em>
     </div>
     <div class="map-panel-body" id="mpb-offer">
       <div class="mode-row">
@@ -469,362 +378,395 @@
   </div>
 </div>
 
+<!-- マッチング演出オーバーレイ -->
+<div id="match-overlay">
+
+  <!-- Phase 1: お祝い演出 -->
+  <div id="phase1" class="match-box">
+    <span class="match-emoji">🎉</span>
+    <h2 class="match-title">マッチング成功！</h2>
+    <p class="match-subtitle" id="match-subtitle"></p>
+    <div class="match-route-badge" id="match-route-badge"></div>
+    <button class="match-action-btn" onclick="showRatingPhase()">⭐ 相手を評価する</button>
+    <button class="match-skip-btn"   onclick="closeMatchOverlay()">あとで評価する</button>
+  </div>
+
+  <!-- Phase 2: 評価 -->
+  <div id="phase2" class="rating-box" style="display:none">
+    <h2>体験を評価してください</h2>
+    <p class="rating-target" id="rating-target"></p>
+    <div class="star-row" id="star-row">
+      <span class="s" onclick="setStars(1)">★</span>
+      <span class="s" onclick="setStars(2)">★</span>
+      <span class="s" onclick="setStars(3)">★</span>
+      <span class="s" onclick="setStars(4)">★</span>
+      <span class="s" onclick="setStars(5)">★</span>
+    </div>
+    <p class="rating-label" id="rating-label">星をタップして評価</p>
+    <textarea class="rating-comment" id="rating-comment" placeholder="コメント（任意）：安心して乗れました、とても親切でした など"></textarea>
+    <button class="rating-submit-btn" onclick="submitRating()">評価を送信する</button>
+    <button class="match-skip-btn"    onclick="closeMatchOverlay()">スキップ</button>
+  </div>
+
+  <!-- Phase 3: 完了 -->
+  <div id="phase3" class="done-box" style="display:none">
+    <div class="done-icon">✅</div>
+    <h2>ありがとうございます！</h2>
+    <p>評価が送信されました。<br>気仙沼の助け合いが広がります。</p>
+  </div>
+
+</div>
+
+<canvas id="confetti-canvas"></canvas>
 <div id="toast"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /* ===== 定数 ===== */
-const STORAGE_KEY = 'kesennuma-hitchhike-v2';
-const CENTER = [38.905, 141.569]; // 気仙沼市中心部
+const STORAGE_KEY  = 'kesennuma-hitchhike-v2';
+const RATINGS_KEY  = 'kesennuma-ratings-v1';
+const CENTER       = [38.905, 141.569];
+const STAR_LABELS  = ['','うーん…','もう一息','まあまあ','よかった！','最高でした！'];
 
 /* ===== デモデータ ===== */
 const DEMO = [
-  {
-    id:'d1', type:'want', name:'鈴木さん',
-    from:'本郷', to:'気仙沼市立病院',
-    fromLatLng:[38.912, 141.568], toLatLng:[38.901, 141.572],
-    departTime:'10:30',
-    comment:'定期通院です。荷物は少なめです。どうぞよろしくお願いします。',
-    status:'open', createdAt: Date.now()-60000*25
-  },
-  {
-    id:'d2', type:'offer', name:'阿部さん',
-    from:'気仙沼駅前', to:'唐桑方面',
-    fromLatLng:[38.905, 141.569], toLatLng:[38.880, 141.640],
-    departTime:'11:00',
-    comment:'唐桑の実家まで向かいます。途中で寄り道も大丈夫です。3名まで乗れます。',
-    status:'open', createdAt: Date.now()-60000*18
-  },
-  {
-    id:'d3', type:'want', name:'佐々木さん',
-    from:'階上（はしかみ）', to:'気仙沼駅',
-    fromLatLng:[38.870, 141.570], toLatLng:[38.905, 141.569],
-    departTime:'13:00',
-    comment:'買い物帰りで少し荷物があります。よろしくお願いします。',
-    status:'open', createdAt: Date.now()-60000*10
-  },
-  {
-    id:'d4', type:'offer', name:'小野寺さん',
-    from:'気仙沼市内', to:'本吉・南三陸方面',
-    fromLatLng:[38.905, 141.569], toLatLng:[38.740, 141.510],
-    departTime:'14:30',
-    comment:'本吉まで用事があります。途中の方もどうぞ。',
-    status:'open', createdAt: Date.now()-60000*5
-  },
+  { id:'d1', type:'want', name:'鈴木さん',   from:'本郷',       to:'気仙沼市立病院',   fromLatLng:[38.912,141.568], toLatLng:[38.901,141.572], departTime:'10:30', comment:'定期通院です。荷物は少なめです。よろしくお願いします。',           status:'open', createdAt:Date.now()-60000*25 },
+  { id:'d2', type:'offer',name:'阿部さん',   from:'気仙沼駅前', to:'唐桑方面',         fromLatLng:[38.905,141.569], toLatLng:[38.880,141.640], departTime:'11:00', comment:'唐桑の実家まで向かいます。途中も大丈夫です。3名まで乗れます。', status:'open', createdAt:Date.now()-60000*18 },
+  { id:'d3', type:'want', name:'佐々木さん', from:'階上（はしかみ）',to:'気仙沼駅',   fromLatLng:[38.870,141.570], toLatLng:[38.905,141.569], departTime:'13:00', comment:'買い物帰りで少し荷物があります。よろしくお願いします。',         status:'open', createdAt:Date.now()-60000*10 },
+  { id:'d4', type:'offer',name:'小野寺さん', from:'気仙沼市内', to:'本吉・南三陸方面', fromLatLng:[38.905,141.569], toLatLng:[38.740,141.510], departTime:'14:30', comment:'本吉まで用事があります。途中の方もどうぞ。',                     status:'open', createdAt:Date.now()-60000*5  },
+];
+const DEMO_RATINGS = [
+  { name:'阿部さん',   stars:5, comment:'とても気さくで安心できました！', at:Date.now()-60000*60 },
+  { name:'阿部さん',   stars:4, comment:'ありがとうございました。',         at:Date.now()-60000*30 },
+  { name:'小野寺さん', stars:5, comment:'親切に途中まで送ってもらえました！', at:Date.now()-60000*45 },
+  { name:'鈴木さん',   stars:4, comment:'礼儀正しくて気持ちよかったです。',  at:Date.now()-60000*20 },
 ];
 
 /* ===== ストレージ ===== */
 function load() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
+  try { const r=localStorage.getItem(STORAGE_KEY); if(r) return JSON.parse(r); } catch(e) {}
   localStorage.setItem(STORAGE_KEY, JSON.stringify(DEMO));
   return DEMO;
 }
 function save(posts) { localStorage.setItem(STORAGE_KEY, JSON.stringify(posts)); }
 
+function loadRatings() {
+  try { const r=localStorage.getItem(RATINGS_KEY); if(r) return JSON.parse(r); } catch(e) {}
+  localStorage.setItem(RATINGS_KEY, JSON.stringify(DEMO_RATINGS));
+  return DEMO_RATINGS;
+}
+function saveRating(r) {
+  const all = loadRatings(); all.push(r);
+  localStorage.setItem(RATINGS_KEY, JSON.stringify(all));
+}
+function getPersonRating(name) {
+  const all = loadRatings().filter(r=>r.name===name);
+  if (!all.length) return null;
+  return { avg: Math.round(all.reduce((s,r)=>s+r.stars,0)/all.length*10)/10, count: all.length };
+}
+function ratingBadge(name) {
+  const r = getPersonRating(name);
+  if (!r) return '';
+  const filled = Math.round(r.avg);
+  return `<span class="rating-badge">${'★'.repeat(filled)}${'☆'.repeat(5-filled)} ${r.avg} <span class="rating-count">(${r.count}件)</span></span>`;
+}
+
 /* ===== ユーティリティ ===== */
-function esc(s) {
-  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-function uid() { return 'p' + Date.now() + Math.random().toString(36).slice(2,6); }
-function timeAgo(ts) {
-  const m = Math.floor((Date.now()-ts)/60000);
-  if (m < 1)  return 'たった今';
-  if (m < 60) return m + '分前';
-  return Math.floor(m/60) + '時間前';
-}
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2800);
-}
+function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function uid(){ return 'p'+Date.now()+Math.random().toString(36).slice(2,6); }
+function timeAgo(ts){ const m=Math.floor((Date.now()-ts)/60000); if(m<1)return'たった今'; if(m<60)return m+'分前'; return Math.floor(m/60)+'時間前'; }
+function toast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2800); }
 
 /* ===== タブ ===== */
 function showTab(tab) {
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    t.classList.toggle('active', ['want','offer','board'][i] === tab);
-  });
-  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
-  document.getElementById('pane-' + tab).classList.add('active');
-  if (tab === 'board') renderBoard();
-  setTimeout(() => {
-    const m = formMaps[tab];
-    if (m && document.getElementById(`mpb-${tab}`)?.classList.contains('open')) m.invalidateSize();
-  }, 60);
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['want','offer','board'][i]===tab));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pane-'+tab).classList.add('active');
+  if(tab==='board') renderBoard();
+  setTimeout(()=>{ const m=formMaps[tab]; if(m&&document.getElementById(`mpb-${tab}`)?.classList.contains('open')) m.invalidateSize(); },60);
 }
 
-/* ===== 掲示板レンダリング ===== */
+/* ===== 掲示板 ===== */
 function renderBoard() {
-  const posts = load();
+  const posts=load();
   document.getElementById('brd-want').innerHTML  = renderCards(posts.filter(p=>p.type==='want'),  'want');
   document.getElementById('brd-offer').innerHTML = renderCards(posts.filter(p=>p.type==='offer'), 'offer');
 }
-
 function renderCards(posts, type) {
-  if (!posts.length) return '<div class="empty">投稿がありません</div>';
-  return [...posts].sort((a,b)=>b.createdAt-a.createdAt).map(p => {
-    const label  = type==='want' ? '乗せます' : '乗ります';
-    const cls    = type==='want' ? 'want' : 'offer';
-    const action = p.status === 'matched'
+  if(!posts.length) return '<div class="empty">投稿がありません</div>';
+  return [...posts].sort((a,b)=>b.createdAt-a.createdAt).map(p=>{
+    const label  = type==='want'?'乗せます':'乗ります';
+    const cls    = type==='want'?'want':'offer';
+    const action = p.status==='matched'
       ? `<span class="matched-label">マッチング済み</span>`
       : `<button class="match-btn ${cls}" onclick="match('${p.id}')">${label}</button>`;
-    const mapBtn = (p.fromLatLng && p.toLatLng)
+    const mapBtn = (p.fromLatLng&&p.toLatLng)
       ? `<button class="map-view-btn" onclick='openRouteModal(${JSON.stringify(p)})'>🗺️ 地図を見る</button>`
       : `<span class="no-map-note">（位置情報なし）</span>`;
     return `
     <div class="post-card ${p.status==='matched'?'matched':''}">
       <div class="post-header">
         <span class="badge ${type}">${type==='want'?'乗りたい':'乗せたい'}</span>
-        <span class="post-name">${esc(p.name)}</span>
+        <span class="post-name">${esc(p.name)}</span>${ratingBadge(p.name)}
         <span class="post-ts">${timeAgo(p.createdAt)}</span>
       </div>
-      <div class="route-row">
-        <span class="fr">${esc(p.from)}</span>
-        <span class="ar">→</span>
-        <span class="to">${esc(p.to)}</span>
-      </div>
+      <div class="route-row"><span class="fr">${esc(p.from)}</span><span class="ar">→</span><span class="to">${esc(p.to)}</span></div>
       <div class="depart-time">希望時刻：${esc(p.departTime)}</div>
-      ${p.comment ? `<div class="comment">${esc(p.comment)}</div>` : ''}
+      ${p.comment?`<div class="comment">${esc(p.comment)}</div>`:''}
       <div class="card-actions">${action}${mapBtn}</div>
     </div>`;
   }).join('');
 }
 
+/* ===== マッチング ===== */
+let currentMatchPost = null;
+let currentStars = 0;
+
 function match(id) {
-  const posts = load();
-  const p = posts.find(x=>x.id===id);
-  if (!p || p.status==='matched') return;
-  p.status = 'matched';
+  const posts=load();
+  const p=posts.find(x=>x.id===id);
+  if(!p||p.status==='matched') return;
+  p.status='matched';
   save(posts);
   renderBoard();
-  toast(p.type==='want' ? `${p.name}さんに「乗せます」と伝えました！` : `${p.name}さんに「乗ります」と伝えました！`);
+  showMatchOverlay(p);
+}
+
+/* ===== マッチング演出 ===== */
+function showMatchOverlay(post) {
+  currentMatchPost = post;
+  currentStars = 0;
+  document.getElementById('match-subtitle').textContent =
+    post.type==='want' ? `${post.name} さんに乗せる旨を伝えました` : `${post.name} さんの車に乗る旨を伝えました`;
+  document.getElementById('match-route-badge').innerHTML =
+    `<span class="mfr">${esc(post.from)}</span><span style="color:#6a8898">→</span><span class="mto">${esc(post.to)}</span>`;
+  document.getElementById('rating-target').textContent = `${post.name} さんへの評価`;
+  document.getElementById('rating-comment').value = '';
+  updateStarDisplay(0);
+  document.getElementById('rating-label').textContent = '星をタップして評価';
+  document.getElementById('phase1').style.display='';
+  document.getElementById('phase2').style.display='none';
+  document.getElementById('phase3').style.display='none';
+  document.getElementById('match-overlay').classList.add('open');
+  launchConfetti();
+}
+function showRatingPhase() {
+  document.getElementById('phase1').style.display='none';
+  document.getElementById('phase2').style.display='';
+}
+function setStars(n) {
+  currentStars=n;
+  updateStarDisplay(n);
+  document.getElementById('rating-label').textContent=STAR_LABELS[n];
+}
+function updateStarDisplay(n) {
+  document.querySelectorAll('#star-row .s').forEach((el,i)=>el.classList.toggle('lit',i<n));
+}
+function submitRating() {
+  if(!currentStars){ document.getElementById('rating-label').textContent='★ 星をタップして評価してください'; return; }
+  saveRating({ name:currentMatchPost.name, postId:currentMatchPost.id, stars:currentStars, comment:document.getElementById('rating-comment').value.trim(), at:Date.now() });
+  document.getElementById('phase2').style.display='none';
+  document.getElementById('phase3').style.display='';
+  setTimeout(closeMatchOverlay, 2400);
+  renderBoard();
+}
+function closeMatchOverlay() { document.getElementById('match-overlay').classList.remove('open'); }
+
+/* ===== コンフェッティ ===== */
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+  const colors = ['#c8451f','#2e6f8e','#2e7d52','#f5a623','#5bb8dc','#f0e060','#e87aba','#fff'];
+  const shapes = ['rect','circle'];
+  const particles = Array.from({length:180}, ()=>({
+    x:  Math.random()*canvas.width,
+    y: -20-Math.random()*150,
+    w:  6+Math.random()*10,
+    h:  3+Math.random()*6,
+    color: colors[Math.floor(Math.random()*colors.length)],
+    shape: shapes[Math.floor(Math.random()*shapes.length)],
+    rot:  Math.random()*Math.PI*2,
+    rs:   (Math.random()-0.5)*0.22,
+    vx:   (Math.random()-0.5)*6,
+    vy:   2+Math.random()*5,
+    op:   1,
+  }));
+  let frame=0;
+  function step() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive=false;
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.rs;
+      if(p.y>canvas.height*0.72) p.op-=0.022;
+      if(p.op<=0) return;
+      alive=true;
+      ctx.save();
+      ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.globalAlpha=p.op; ctx.fillStyle=p.color;
+      if(p.shape==='circle') { ctx.beginPath(); ctx.arc(0,0,p.w/2,0,Math.PI*2); ctx.fill(); }
+      else ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    frame++;
+    if(alive&&frame<220) requestAnimationFrame(step);
+    else { canvas.style.display='none'; ctx.clearRect(0,0,canvas.width,canvas.height); }
+  }
+  step();
 }
 
 /* ===== 地図（フォーム用） ===== */
-const formMaps           = {};
+const formMaps            = {};
 const existingPostsGroups = {};
 const formState = {
-  want:  { mode:'from', fromLatLng:null, toLatLng:null, fromMarker:null, toMarker:null, routeLayer:null },
-  offer: { mode:'from', fromLatLng:null, toLatLng:null, fromMarker:null, toMarker:null, routeLayer:null },
+  want:  {mode:'from',fromLatLng:null,toLatLng:null,fromMarker:null,toMarker:null,routeLayer:null},
+  offer: {mode:'from',fromLatLng:null,toLatLng:null,fromMarker:null,toMarker:null,routeLayer:null},
 };
-
-const fromIcon = L.divIcon({
-  className:'',
-  html:'<div style="width:14px;height:14px;border-radius:50%;background:#2e6f8e;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>',
-  iconSize:[14,14], iconAnchor:[7,7]
-});
-const toIcon = L.divIcon({
-  className:'',
-  html:'<div style="width:14px;height:14px;border-radius:50%;background:#c8451f;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>',
-  iconSize:[14,14], iconAnchor:[7,7]
-});
+const fromIcon = L.divIcon({ className:'', html:'<div style="width:14px;height:14px;border-radius:50%;background:#2e6f8e;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>', iconSize:[14,14], iconAnchor:[7,7] });
+const toIcon   = L.divIcon({ className:'', html:'<div style="width:14px;height:14px;border-radius:50%;background:#c8451f;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>', iconSize:[14,14], iconAnchor:[7,7] });
 
 function toggleMapPanel(type) {
-  const hdr  = document.getElementById(`mph-${type}`);
-  const body = document.getElementById(`mpb-${type}`);
-  const open = body.classList.toggle('open');
-  hdr.classList.toggle('open', open);
-  if (open) {
-    if (!formMaps[type]) {
-      initFormMap(type);
-    } else {
-      setTimeout(() => {
-        formMaps[type].invalidateSize();
-        refreshExistingPosts(type, formMaps[type]);
-      }, 60);
-    }
+  const hdr=document.getElementById(`mph-${type}`);
+  const body=document.getElementById(`mpb-${type}`);
+  const open=body.classList.toggle('open');
+  hdr.classList.toggle('open',open);
+  if(open) {
+    if(!formMaps[type]) initFormMap(type);
+    else setTimeout(()=>{ formMaps[type].invalidateSize(); refreshExistingPosts(type,formMaps[type]); },60);
   }
 }
-
 function initFormMap(type) {
-  const map = L.map(`fmap-${type}`).setView(CENTER, 12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 18
-  }).addTo(map);
-  map.on('click', e => onFormMapClick(type, e.latlng));
-  formMaps[type] = map;
-  refreshExistingPosts(type, map);
+  const map=L.map(`fmap-${type}`).setView(CENTER,12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:18}).addTo(map);
+  map.on('click',e=>onFormMapClick(type,e.latlng));
+  formMaps[type]=map;
+  refreshExistingPosts(type,map);
 }
-
-function refreshExistingPosts(type, map) {
-  if (existingPostsGroups[type]) map.removeLayer(existingPostsGroups[type]);
-
-  const showType = type === 'want' ? 'offer' : 'want';
-  const lineColor = showType === 'offer' ? '#2e7d52' : '#c8451f';
-  const group = L.layerGroup();
-  const posts = load().filter(p => p.type === showType && p.fromLatLng && p.toLatLng && p.status !== 'matched');
-
-  posts.forEach(p => {
-    const popup = `<b>${esc(p.name)}</b><br>${esc(p.from)} → ${esc(p.to)}<br>時刻：${esc(p.departTime)}`;
-    L.polyline([p.fromLatLng, p.toLatLng], {color: lineColor, weight: 2.5, opacity: 0.55, dashArray: '6 4'})
-      .addTo(group).bindPopup(popup);
-    L.circleMarker(p.fromLatLng, {radius:6, color:'#2e6f8e', fillColor:'#2e6f8e', fillOpacity:0.75, weight:1.5})
-      .addTo(group).bindPopup(`<b>${esc(p.name)}</b><br>出発：${esc(p.from)}`);
-    L.circleMarker(p.toLatLng,   {radius:6, color: lineColor, fillColor: lineColor, fillOpacity:0.75, weight:1.5})
-      .addTo(group).bindPopup(`<b>${esc(p.name)}</b><br>目的：${esc(p.to)}`);
+function refreshExistingPosts(type,map) {
+  if(existingPostsGroups[type]) map.removeLayer(existingPostsGroups[type]);
+  const showType  = type==='want'?'offer':'want';
+  const lineColor = showType==='offer'?'#2e7d52':'#c8451f';
+  const group=L.layerGroup();
+  load().filter(p=>p.type===showType&&p.fromLatLng&&p.toLatLng&&p.status!=='matched').forEach(p=>{
+    const popup=`<b>${esc(p.name)}</b><br>${esc(p.from)} → ${esc(p.to)}<br>時刻：${esc(p.departTime)}`;
+    L.polyline([p.fromLatLng,p.toLatLng],{color:lineColor,weight:2.5,opacity:0.55,dashArray:'6 4'}).addTo(group).bindPopup(popup);
+    L.circleMarker(p.fromLatLng,{radius:6,color:'#2e6f8e',fillColor:'#2e6f8e',fillOpacity:0.75,weight:1.5}).addTo(group).bindPopup(`<b>${esc(p.name)}</b><br>出発：${esc(p.from)}`);
+    L.circleMarker(p.toLatLng,  {radius:6,color:lineColor,fillColor:lineColor,fillOpacity:0.75,weight:1.5}).addTo(group).bindPopup(`<b>${esc(p.name)}</b><br>目的：${esc(p.to)}`);
   });
-
   group.addTo(map);
-  existingPostsGroups[type] = group;
+  existingPostsGroups[type]=group;
 }
-
-function onFormMapClick(type, latlng) {
-  const st  = formState[type];
-  const map = formMaps[type];
-  const arr = [latlng.lat, latlng.lng];
-  if (st.mode === 'from') {
-    if (st.fromMarker) map.removeLayer(st.fromMarker);
-    st.fromMarker = L.marker(latlng, {icon:fromIcon}).addTo(map).bindPopup('出発地').openPopup();
-    st.fromLatLng = arr;
-    document.getElementById(`w-from`) && (type==='want') && (document.getElementById('w-from').value = document.getElementById('w-from').value || `${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`);
-    document.getElementById(`o-from`) && (type==='offer') && (document.getElementById('o-from').value = document.getElementById('o-from').value || `${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`);
-    setMode(type, 'to');
+function onFormMapClick(type,latlng) {
+  const st=formState[type]; const map=formMaps[type]; const arr=[latlng.lat,latlng.lng];
+  if(st.mode==='from') {
+    if(st.fromMarker) map.removeLayer(st.fromMarker);
+    st.fromMarker=L.marker(latlng,{icon:fromIcon}).addTo(map).bindPopup('出発地').openPopup();
+    st.fromLatLng=arr;
+    if(type==='want'&&!document.getElementById('w-from').value) document.getElementById('w-from').value=`${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`;
+    if(type==='offer'&&!document.getElementById('o-from').value) document.getElementById('o-from').value=`${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`;
+    setMode(type,'to');
   } else {
-    if (st.toMarker) map.removeLayer(st.toMarker);
-    st.toMarker = L.marker(latlng, {icon:toIcon}).addTo(map).bindPopup('目的地').openPopup();
-    st.toLatLng = arr;
-    document.getElementById(`w-to`) && (type==='want') && (document.getElementById('w-to').value = document.getElementById('w-to').value || `${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`);
-    document.getElementById(`o-to`) && (type==='offer') && (document.getElementById('o-to').value = document.getElementById('o-to').value || `${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`);
+    if(st.toMarker) map.removeLayer(st.toMarker);
+    st.toMarker=L.marker(latlng,{icon:toIcon}).addTo(map).bindPopup('目的地').openPopup();
+    st.toLatLng=arr;
+    if(type==='want'&&!document.getElementById('w-to').value) document.getElementById('w-to').value=`${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`;
+    if(type==='offer'&&!document.getElementById('o-to').value) document.getElementById('o-to').value=`${latlng.lat.toFixed(4)},${latlng.lng.toFixed(4)}`;
   }
-  if (st.fromLatLng && st.toLatLng) drawRoute(map, st.fromLatLng, st.toLatLng, st);
+  if(st.fromLatLng&&st.toLatLng) drawRoute(map,st.fromLatLng,st.toLatLng,st);
 }
-
-function setMode(type, mode) {
-  formState[type].mode = mode;
-  const fBtn = document.getElementById(`mbf-${type}`);
-  const tBtn = document.getElementById(`mbt-${type}`);
-  fBtn.className = 'mode-btn' + (mode==='from' ? ' sel-from' : '');
-  tBtn.className = 'mode-btn' + (mode==='to'   ? ' sel-to'   : '');
+function setMode(type,mode) {
+  formState[type].mode=mode;
+  document.getElementById(`mbf-${type}`).className='mode-btn'+(mode==='from'?' sel-from':'');
+  document.getElementById(`mbt-${type}`).className='mode-btn'+(mode==='to'?' sel-to':'');
 }
-
 function useGPS(type) {
-  if (!navigator.geolocation) { toast('位置情報が利用できません'); return; }
+  if(!navigator.geolocation){toast('位置情報が利用できません');return;}
   toast('現在地を取得中...');
-  navigator.geolocation.getCurrentPosition(pos => {
-    const map = formMaps[type];
-    if (!map) return;
-    map.setView([pos.coords.latitude, pos.coords.longitude], 14);
-    onFormMapClick(type, L.latLng(pos.coords.latitude, pos.coords.longitude));
-  }, () => toast('位置情報の取得に失敗しました'));
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const map=formMaps[type]; if(!map) return;
+    map.setView([pos.coords.latitude,pos.coords.longitude],14);
+    onFormMapClick(type,L.latLng(pos.coords.latitude,pos.coords.longitude));
+  },()=>toast('位置情報の取得に失敗しました'));
 }
 
-/* ===== ルート描画（OSRM → 直線フォールバック） ===== */
-async function drawRoute(map, from, to, state) {
-  if (state.routeLayer) {
-    if (Array.isArray(state.routeLayer)) state.routeLayer.forEach(l=>map.removeLayer(l));
-    else map.removeLayer(state.routeLayer);
-    state.routeLayer = null;
-  }
+/* ===== ルート描画 ===== */
+async function drawRoute(map,from,to,state) {
+  if(state.routeLayer){ if(Array.isArray(state.routeLayer)) state.routeLayer.forEach(l=>map.removeLayer(l)); else map.removeLayer(state.routeLayer); state.routeLayer=null; }
   try {
-    const url = `https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${to[1]},${to[0]}?overview=full&geometries=geojson`;
-    const res  = await fetch(url);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    if (data.code === 'Ok' && data.routes?.[0]) {
-      const coords = data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
-      const line = L.polyline(coords, {color:'#2e6f8e', weight:4, opacity:0.85}).addTo(map);
-      state.routeLayer = line;
-      map.fitBounds(line.getBounds(), {padding:[40,40]});
-      return;
+    const url=`https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${to[1]},${to[0]}?overview=full&geometries=geojson`;
+    const res=await fetch(url); if(!res.ok) throw new Error();
+    const data=await res.json();
+    if(data.code==='Ok'&&data.routes?.[0]){
+      const coords=data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+      const line=L.polyline(coords,{color:'#2e6f8e',weight:4,opacity:0.85}).addTo(map);
+      state.routeLayer=line; map.fitBounds(line.getBounds(),{padding:[40,40]}); return;
     }
-  } catch(e) {}
-  const line = L.polyline([from,to], {color:'#2e6f8e', weight:3, opacity:0.65, dashArray:'8 5'}).addTo(map);
-  state.routeLayer = line;
-  map.fitBounds(L.latLngBounds([from,to]), {padding:[40,40]});
+  } catch(e){}
+  const line=L.polyline([from,to],{color:'#2e6f8e',weight:3,opacity:0.65,dashArray:'8 5'}).addTo(map);
+  state.routeLayer=line; map.fitBounds(L.latLngBounds([from,to]),{padding:[40,40]});
 }
 
 /* ===== ルートモーダル ===== */
-let routeMapInst = null;
-const modalRouteState = { routeLayer: null };
-
+let routeMapInst=null;
+const modalRouteState={routeLayer:null};
 function openRouteModal(post) {
-  document.getElementById('modal-title').textContent = `${post.name} さんのルート`;
-  document.getElementById('modal-info').innerHTML = `
-    <div class="modal-route-row">
-      <span style="color:var(--wave)">${esc(post.from)}</span>
-      <span style="color:#bbb">→</span>
-      <span style="color:var(--accent)">${esc(post.to)}</span>
-    </div>
+  document.getElementById('modal-title').textContent=`${post.name} さんのルート`;
+  document.getElementById('modal-info').innerHTML=`
+    <div class="modal-route-row"><span style="color:var(--wave)">${esc(post.from)}</span><span style="color:#bbb">→</span><span style="color:var(--accent)">${esc(post.to)}</span></div>
     <div>出発時刻：${esc(post.departTime)}</div>
-    ${post.comment ? `<div style="margin-top:.4rem;color:#556;">${esc(post.comment)}</div>` : ''}
+    ${post.comment?`<div style="margin-top:.4rem;color:#556;">${esc(post.comment)}</div>`:''}
   `;
   document.getElementById('route-modal').classList.add('open');
-
-  setTimeout(() => {
-    if (!routeMapInst) {
-      routeMapInst = L.map('route-map').setView(CENTER, 12);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 18
-      }).addTo(routeMapInst);
+  setTimeout(()=>{
+    if(!routeMapInst){
+      routeMapInst=L.map('route-map').setView(CENTER,12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:18}).addTo(routeMapInst);
     } else {
-      routeMapInst.eachLayer(l => { if (!(l instanceof L.TileLayer)) routeMapInst.removeLayer(l); });
-      modalRouteState.routeLayer = null;
+      routeMapInst.eachLayer(l=>{if(!(l instanceof L.TileLayer)) routeMapInst.removeLayer(l);}); modalRouteState.routeLayer=null;
     }
     routeMapInst.invalidateSize();
-
-    if (post.fromLatLng && post.toLatLng) {
-      L.marker(post.fromLatLng, {icon:fromIcon}).addTo(routeMapInst).bindPopup(`出発地：${post.from}`).openPopup();
-      L.marker(post.toLatLng,   {icon:toIcon  }).addTo(routeMapInst).bindPopup(`目的地：${post.to}`);
-      drawRoute(routeMapInst, post.fromLatLng, post.toLatLng, modalRouteState);
-    } else {
-      routeMapInst.setView(CENTER, 12);
-    }
-  }, 100);
+    if(post.fromLatLng&&post.toLatLng){
+      L.marker(post.fromLatLng,{icon:fromIcon}).addTo(routeMapInst).bindPopup(`出発地：${post.from}`).openPopup();
+      L.marker(post.toLatLng,  {icon:toIcon  }).addTo(routeMapInst).bindPopup(`目的地：${post.to}`);
+      drawRoute(routeMapInst,post.fromLatLng,post.toLatLng,modalRouteState);
+    } else routeMapInst.setView(CENTER,12);
+  },100);
 }
-
-function closeModal() { document.getElementById('route-modal').classList.remove('open'); }
-function handleModalClick(e) { if (e.target === document.getElementById('route-modal')) closeModal(); }
+function closeModal(){ document.getElementById('route-modal').classList.remove('open'); }
+function handleModalClick(e){ if(e.target===document.getElementById('route-modal')) closeModal(); }
 
 /* ===== 投稿 ===== */
 function postWant() {
-  const from    = document.getElementById('w-from').value.trim();
-  const to      = document.getElementById('w-to').value.trim();
-  const time    = document.getElementById('w-time').value;
-  const name    = document.getElementById('w-name').value.trim();
-  const comment = document.getElementById('w-comment').value.trim();
-  if (!from || !to || !name) { toast('出発地・目的地・名前を入力してください'); return; }
-  const st = formState.want;
-  const posts = load();
-  posts.push({
-    id: uid(), type:'want', name, from, to,
-    fromLatLng: st.fromLatLng, toLatLng: st.toLatLng,
-    departTime: time || '未定', comment, status:'open', createdAt: Date.now()
-  });
+  const from=document.getElementById('w-from').value.trim(),to=document.getElementById('w-to').value.trim();
+  const time=document.getElementById('w-time').value,name=document.getElementById('w-name').value.trim();
+  const comment=document.getElementById('w-comment').value.trim();
+  if(!from||!to||!name){toast('出発地・目的地・名前を入力してください');return;}
+  const st=formState.want,posts=load();
+  posts.push({id:uid(),type:'want',name,from,to,fromLatLng:st.fromLatLng,toLatLng:st.toLatLng,departTime:time||'未定',comment,status:'open',createdAt:Date.now()});
   save(posts);
-  ['w-from','w-to','w-time','w-name','w-comment'].forEach(id => document.getElementById(id).value='');
-  st.fromLatLng = st.toLatLng = null;
-  if (st.fromMarker) { formMaps.want?.removeLayer(st.fromMarker); st.fromMarker=null; }
-  if (st.toMarker)   { formMaps.want?.removeLayer(st.toMarker);   st.toMarker=null; }
-  if (st.routeLayer) { if(Array.isArray(st.routeLayer)) st.routeLayer.forEach(l=>formMaps.want?.removeLayer(l)); else formMaps.want?.removeLayer(st.routeLayer); st.routeLayer=null; }
+  ['w-from','w-to','w-time','w-name','w-comment'].forEach(id=>document.getElementById(id).value='');
+  st.fromLatLng=st.toLatLng=null;
+  if(st.fromMarker){formMaps.want?.removeLayer(st.fromMarker);st.fromMarker=null;}
+  if(st.toMarker)  {formMaps.want?.removeLayer(st.toMarker);  st.toMarker=null;}
+  if(st.routeLayer){if(Array.isArray(st.routeLayer))st.routeLayer.forEach(l=>formMaps.want?.removeLayer(l));else formMaps.want?.removeLayer(st.routeLayer);st.routeLayer=null;}
   toast('投稿しました！掲示板を確認してください');
   showTab('board');
 }
-
 function postOffer() {
-  const from    = document.getElementById('o-from').value.trim();
-  const to      = document.getElementById('o-to').value.trim();
-  const time    = document.getElementById('o-time').value;
-  const name    = document.getElementById('o-name').value.trim();
-  const comment = document.getElementById('o-comment').value.trim();
-  if (!from || !to || !name) { toast('出発地・方向・名前を入力してください'); return; }
-  const st = formState.offer;
-  const posts = load();
-  posts.push({
-    id: uid(), type:'offer', name, from, to,
-    fromLatLng: st.fromLatLng, toLatLng: st.toLatLng,
-    departTime: time || '未定', comment, status:'open', createdAt: Date.now()
-  });
+  const from=document.getElementById('o-from').value.trim(),to=document.getElementById('o-to').value.trim();
+  const time=document.getElementById('o-time').value,name=document.getElementById('o-name').value.trim();
+  const comment=document.getElementById('o-comment').value.trim();
+  if(!from||!to||!name){toast('出発地・方向・名前を入力してください');return;}
+  const st=formState.offer,posts=load();
+  posts.push({id:uid(),type:'offer',name,from,to,fromLatLng:st.fromLatLng,toLatLng:st.toLatLng,departTime:time||'未定',comment,status:'open',createdAt:Date.now()});
   save(posts);
-  ['o-from','o-to','o-time','o-name','o-comment'].forEach(id => document.getElementById(id).value='');
-  st.fromLatLng = st.toLatLng = null;
-  if (st.fromMarker) { formMaps.offer?.removeLayer(st.fromMarker); st.fromMarker=null; }
-  if (st.toMarker)   { formMaps.offer?.removeLayer(st.toMarker);   st.toMarker=null; }
-  if (st.routeLayer) { if(Array.isArray(st.routeLayer)) st.routeLayer.forEach(l=>formMaps.offer?.removeLayer(l)); else formMaps.offer?.removeLayer(st.routeLayer); st.routeLayer=null; }
+  ['o-from','o-to','o-time','o-name','o-comment'].forEach(id=>document.getElementById(id).value='');
+  st.fromLatLng=st.toLatLng=null;
+  if(st.fromMarker){formMaps.offer?.removeLayer(st.fromMarker);st.fromMarker=null;}
+  if(st.toMarker)  {formMaps.offer?.removeLayer(st.toMarker);  st.toMarker=null;}
+  if(st.routeLayer){if(Array.isArray(st.routeLayer))st.routeLayer.forEach(l=>formMaps.offer?.removeLayer(l));else formMaps.offer?.removeLayer(st.routeLayer);st.routeLayer=null;}
   toast('投稿しました！掲示板を確認してください');
   showTab('board');
 }
